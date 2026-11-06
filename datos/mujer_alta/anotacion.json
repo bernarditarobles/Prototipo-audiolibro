@@ -1,0 +1,813 @@
+{
+  "version": 1,
+  "titulo": "La mujer alta (Pedro A. de Alarcón)",
+  "audio": "mujer_alta_128kb.mp3",
+  "matiz_base": 210.0,
+  "d_min": 20.0,
+  "modelo_anotacion": "Claude, anotación en sesión de Claude Code con la instrucción de preprocesamiento/anotar.py (no vía API)",
+  "generado": "2026-11-06T18:28:10+00:00",
+  "segmentos": [
+    {
+      "id": 0,
+      "inicio": 0.0,
+      "fin": 22.0,
+      "texto": "Capítulo 4 de Narraciones Inquietantes Esta grabación de LibriVox está en el dominio público. La mujer alta, por Pedro Antonio de Alarcón. ¿Qué sabemos, amigos míos? ¿Qué sabemos? Esclamó Gabriel, distinguido ingeniero de Montes, sentándose debajo de un pino",
+      "valencia": 0.1,
+      "activacion": 0.2
+    },
+    {
+      "id": 1,
+      "inicio": 22.0,
+      "fin": 46.0,
+      "texto": "y cerca de una fuente en la cumbre del Guadarrama, al Egua y media del Escorial, en el límite divisorio de las provincias de Madrid y Segovia. Situ y fuente y pino que yo conozco y me parece estar viendo, pero cuyo nombre se me ha olvidado. Sentémonos como es de rigor y está escrito en nuestro programa, continúa Gabriel.",
+      "valencia": 0.35,
+      "activacion": 0.15
+    },
+    {
+      "id": 2,
+      "inicio": 46.0,
+      "fin": 66.0,
+      "texto": "A descansar y hacer por la vida en este ameno y clásico paraje, famoso por la virtud digestiva del agua de ese manantial y por los muchos borregos que aquí se han comido nuestros ilustres maestros Don Miguel Bosch, Don Máximo Laguna, Don Agustín Pascual y otros grandes naturalistas.",
+      "valencia": 0.45,
+      "activacion": 0.15
+    },
+    {
+      "id": 3,
+      "inicio": 66.0,
+      "fin": 89.0,
+      "texto": "Y os contaré una rara y peregrina historia en comprobación de mitesis, reducida a manifestar, aunque me llaméis obscurantista, que en el globo terratio ocurren todavía cosas sobrenaturales. Esto es, cosas que no caben en la cuadrícula de la razón, de la ciencia ni de la filosofía, tal y como hoy se entienden,",
+      "valencia": 0.05,
+      "activacion": 0.3
+    },
+    {
+      "id": 4,
+      "inicio": 89.0,
+      "fin": 112.0,
+      "texto": "o no se entienden semejantes palabras, palabras y palabras, que diría Hamlet. En Derezaba Gabriel, este pintoresco discurso hacién sujetos de diferente edad, pero ninguno joven, y solo uno entrado ya en años. También ingenieros de Montes, tres de ellos, pintor el cuarto, y un poco literato el quinto,",
+      "valencia": 0.2,
+      "activacion": 0.15
+    },
+    {
+      "id": 5,
+      "inicio": 112.0,
+      "fin": 134.0,
+      "texto": "todos los cuales habían subido con el orador, que era el más pollo, en sendas burras de alquiler, desde el real sitio de San Lorenzo, a pasar aquel día herborizando en los hermosos pinares de peguerinos, cazando mariposas por medio de mangas de tulle, cogiendo coleópteros raros bajo la corteza de los pinos enfermos",
+      "valencia": 0.45,
+      "activacion": 0.2
+    },
+    {
+      "id": 6,
+      "inicio": 134.0,
+      "fin": 155.0,
+      "texto": "y comiéndose una carga de víveres fiambres pagados a Escote. Sucedía esto en 1875, y era en el rigor del estío. No recuerdo si el día de Santiago o el de San Luis, inclinóme a creer el de San Luis. Como quiera que fuese, gozábase en aquellas alturas de un fresco delicioso,",
+      "valencia": 0.45,
+      "activacion": 0.15
+    },
+    {
+      "id": 7,
+      "inicio": 155.0,
+      "fin": 178.0,
+      "texto": "y el corazón, el estómago y la inteligencia funcionaban allí mejor que en el mundo social y en la vida ordinaria. Sentado que subieron los seis amigos, Gabriel continuó hablando de esta manera. Creo que no me tacharéis de visionario. Por fortuna o desgracia mía, soy, digamoslo así, un hombre a la moderna,",
+      "valencia": 0.4,
+      "activacion": 0.2
+    },
+    {
+      "id": 8,
+      "inicio": 178.0,
+      "fin": 201.0,
+      "texto": "nada supersticioso y tan positivista como el que más. Bien que incluya entre los datos positivos de la naturaleza todas las misteriosas facultades y emociones de mi alma en materias de sentimiento. Pues bien, a propósito de fenómenos sobrenaturales o extra-naturales, oid lo que yo he oído y ve lo que yo he visto.",
+      "valencia": 0.0,
+      "activacion": 0.3
+    },
+    {
+      "id": 9,
+      "inicio": 201.0,
+      "fin": 224.0,
+      "texto": "Aún sin ser el verdadero héroe de la singularísima historia que voy a contar, y decirme enseguida qué explicación terrestre, física, natural o como queramos llamarla, puede darse a tan maravilloso acontecimiento. El caso fue como sigue. A ver, echar una gota, que ya se habrá refrescado el pellejo dentro de desabullidores",
+      "valencia": 0.15,
+      "activacion": 0.3
+    },
+    {
+      "id": 10,
+      "inicio": 224.0,
+      "fin": 248.0,
+      "texto": "cristalina fuente colocada por Dios en esta pinífera cumbre para enfriar el vino de los botánicos. Pues, señor, no sé si habréis oído hablar de un ingenio de caminos llamado Telesforo, que murió en 1860. Yo no, yo sí, yo también. Un muchacho andaluz con bigote negro que estuvo para casarse con la hija del Marqués de Moreda",
+      "valencia": -0.2,
+      "activacion": 0.25
+    },
+    {
+      "id": 11,
+      "inicio": 248.0,
+      "fin": 271.0,
+      "texto": "y que murió de Ictericia, ese mismo, continuó Gabriel. Pues bien, mi amigo Telesforo, medio año antes de su muerte, era todavía un joven brillantísimo, como se dice ahora. Guapo, fuerte, animoso, con la ureola de haber sido el primero de su promoción en la escuela de caminos y acreditado ya en la práctica por la ejecución de notables trabajos.",
+      "valencia": 0.1,
+      "activacion": 0.25
+    },
+    {
+      "id": 12,
+      "inicio": 271.0,
+      "fin": 296.0,
+      "texto": "Disputábanselo varias empresas particulares en aquellos años de oro de las obras públicas, y también se lo disputaban las mujeres por casar o mal casadas, y por supuesto las viudas impenitentes. Y entre ellas alguna buena moza que... pero la tal viuda no viene ahora cuento. Pues aquí en Telesforo quiso, con toda formalidad, fue a su citada novia, la pobre Joaquinita Moreda,",
+      "valencia": 0.2,
+      "activacion": 0.25
+    },
+    {
+      "id": 13,
+      "inicio": 296.0,
+      "fin": 320.0,
+      "texto": "y lo otro no pasó de amorío puramente usufructuario. Señor Don Gabriel, al orden. Sí, sí, voy al orden, pues ni mi historia, ni la controverse a pendientes, se prestan a chances ni don aires. Juan, échame otro medio vaso. Bueno, está de verdad este vino, con que atención y poneos serios, que ahora comienza lo luctuoso.",
+      "valencia": -0.1,
+      "activacion": 0.3
+    },
+    {
+      "id": 14,
+      "inicio": 320.0,
+      "fin": 343.0,
+      "texto": "Sucedió, como sabréis, los que la conocisteis, que Joaquina murió de repente en los baños de Santa Águeda a fin del verano de 1859. Allá va me yo en Pau, cuando me dieron tan triste noticia, que me afectó muy especialmente por la íntima amistad que me unía a Telesforo. A ella, sólo le había hablado una vez en casa de su tía, la general Alópez,",
+      "valencia": -0.6,
+      "activacion": 0.35
+    },
+    {
+      "id": 15,
+      "inicio": 343.0,
+      "fin": 363.0,
+      "texto": "y por cierto que aquella palidez azulada, propia de las personas que tienen aneurisma, me pareció desde luego indicio de mala salud. Pero, en fin, la muchacha valía cualquier cosa por su distinción, hermosura y garbo. Y como además, era hija única de título, y de título llevaba a nejos a unos millones que conocí,",
+      "valencia": -0.3,
+      "activacion": 0.25
+    },
+    {
+      "id": 16,
+      "inicio": 363.0,
+      "fin": 385.0,
+      "texto": "que mi buen matemático estaría inconsolable. Por consiguiente, no bien me hallé de regreso en Madrid, a los 15 o 20 días de su desgracia, fui a verlo una mañana muy temprano, a su elegante habitación de mozó de casa abierta, y de jefe de oficina, Calles del Lobo. No recuerdo el número, pero sí que era muy cerca de la carrera de San Jerónimo.",
+      "valencia": -0.4,
+      "activacion": 0.2
+    },
+    {
+      "id": 17,
+      "inicio": 385.0,
+      "fin": 405.0,
+      "texto": "Con tristadísimo, bien que grave y en apariencia dueño de su dolor, estaba el joven ingeniero, trabajando ya aquella hora con sus ayudantes en no sé qué proyecto de ferrocarril, y vestidos de riguroso luto. Abrazome, estrechísimamente y por largo rato, sin lanzar ni el más leve suspiro.",
+      "valencia": -0.55,
+      "activacion": 0.3
+    },
+    {
+      "id": 18,
+      "inicio": 405.0,
+      "fin": 427.0,
+      "texto": "Dio enseguida algunas instrucciones sobre el trabajo pendiente a uno de esos ayudantes, y condujo me, en fin, a su despacho particular, situado al extremo opuesto de la casa, diciéndome por el camino con acento lúgubre y sin mirarme. Mucho me alegro de que hayas venido. Varias veces te he echado de menos en el estado en que me hallo.",
+      "valencia": -0.5,
+      "activacion": 0.3
+    },
+    {
+      "id": 19,
+      "inicio": 427.0,
+      "fin": 451.0,
+      "texto": "Ocurrme una cosa muy particular y extraña, que solo un amigo como tú podría oír sin considerarme imbécil o loco, y acerca de la cual necesito oír alguna opinión serena y fría como la ciencia. Siéntate, prosiguió diciendo cuando hubimos llegado a su despacho. Y no temas en manera alguna que vaya a angustiarte describiéndote el dolor que me aflige,",
+      "valencia": -0.4,
+      "activacion": 0.4
+    },
+    {
+      "id": 20,
+      "inicio": 451.0,
+      "fin": 477.0,
+      "texto": "y que durará tanto como vivida. ¿Para qué? Tú te lo figurarás fácilmente a poco que entiendas de cuitas humanas, y yo no quiero ser consolado ni ahora, ni después ni nunca. De lo que te voy a hablar con la detención que requiere el caso, o sea, tomando el asunto desde su origen, es de una circunstancia horrenda y misteriosa que ha servido como de agüero infernal a esta desventura,",
+      "valencia": -0.65,
+      "activacion": 0.5
+    },
+    {
+      "id": 21,
+      "inicio": 477.0,
+      "fin": 499.0,
+      "texto": "y que tiene conturbado mi espíritu hasta un extremo que te dará espanto. Habla. Respondí yo, comenzando a sentir en efecto, no sé qué arrepentimiento de haber entrado en aquella casa, al ver la expresión de cobardía que se pintó en el rostro de mi amigo. Oye, repuso él enjugándose el asudoros a frente.",
+      "valencia": -0.6,
+      "activacion": 0.5
+    },
+    {
+      "id": 22,
+      "inicio": 501.0,
+      "fin": 521.0,
+      "texto": "No sé si por fatalidad innata de mi imaginación, o por vicio adquirido al oír alguno de aquellos cuentos de viejas, con que tan imprudentemente se asusta a los niños en la cuna, el caso es que desde mis tiernos años no hubo cosa que me causase tanto horror y susto, ya me la figurará mentalmente, ya me la encontrase en realidad,",
+      "valencia": -0.5,
+      "activacion": 0.45
+    },
+    {
+      "id": 23,
+      "inicio": 521.0,
+      "fin": 542.0,
+      "texto": "como una mujer sola en la calle, a altas horas de la noche. Te consta que nunca he sido cobardé, me batí en duelo como cualquier hombre decente, cierta vez que fue necesario, y recién salido de la escuela de ingenieros, cerré a palos y a tiros en Despeña perros con mis sublevados peones, hasta que los reduce a la obediencia.",
+      "valencia": -0.3,
+      "activacion": 0.5
+    },
+    {
+      "id": 24,
+      "inicio": 543.0,
+      "fin": 564.0,
+      "texto": "Toda mi vida en Jaén, en Madrid y en otros varios puntos, he andado a desora por la calle, solo, sin armas, atento únicamente al cuidado amoroso que me hacía velar, y si por si acaso he topado con vultos de mala catadura, fueran ladrones o simples perdonavidas, a ellos les ha tocado oír o echarse a un lado,",
+      "valencia": -0.1,
+      "activacion": 0.4
+    },
+    {
+      "id": 25,
+      "inicio": 564.0,
+      "fin": 587.0,
+      "texto": "dejándome libre el mejor camino. Pero si el vulto era una mujer sola, parada o andando, y yo iba tan bien solo, y no se veía más alma viviente por ningún lado, entonces, ríe, te sí se te antoja, pero créeme, poní aseme carne de gallina. Vagos temores asaltaban mi espíritu, pensaba en almas de otro mundo,",
+      "valencia": -0.45,
+      "activacion": 0.5
+    },
+    {
+      "id": 26,
+      "inicio": 587.0,
+      "fin": 607.0,
+      "texto": "en seres fantásticos, en todas las invenciones supersticiosas que me hacían reír en cualquier otra circunstancia, y apretaba el paso o me volvía atrás, sin que ya se me quitaran el susto, ni pudiera distraerme ni un momento hasta que me vía dentro de mi casa. Una vez en ella, echábame también a reír,",
+      "valencia": -0.35,
+      "activacion": 0.45
+    },
+    {
+      "id": 27,
+      "inicio": 607.0,
+      "fin": 627.0,
+      "texto": "y avergonzábame de mi locura, sirviéndome de alivio el pensar que no la conocía nadie. Allí me daba cuenta, fríamente, de que, pues, yo no creía en duendes, ni en brujas, ni en aparecidos, nada había debido temer de aquella flaca hembra, aquí en la miseria, el vicio, o algún accidente desgraciado,",
+      "valencia": -0.2,
+      "activacion": 0.3
+    },
+    {
+      "id": 28,
+      "inicio": 627.0,
+      "fin": 647.0,
+      "texto": "tendría Natalora fuera de su hogar, y a quien mejor me hubiera estado ofrecer auxilio por si lo necesitaba, o darle mosna si me la pedía. Repetíase con todo la deplorable escena cuantas veces se me presentaba otro caso igual, y cuenta que ya tenía yo 25 años,",
+      "valencia": -0.25,
+      "activacion": 0.3
+    },
+    {
+      "id": 29,
+      "inicio": 647.0,
+      "fin": 668.0,
+      "texto": "muchos de ellos de aventurero nocturno, sin que jamás me hubiese ocurrido lance alguno penoso con las tales mujeres solitarias y trasnochadoras. Pero, en fin, nada de lo dicho llegó nunca a adquirir verdadera importancia, pues aquel pavor irracional se me disipaba siempre tal luego como llegaba a mi casa o veía otras personas en la calle,",
+      "valencia": -0.1,
+      "activacion": 0.25
+    },
+    {
+      "id": 30,
+      "inicio": 668.0,
+      "fin": 690.0,
+      "texto": "y ni tan siquiera lo recuerdan las equivocaciones o necesidades sin fundamento ni consecuencia. Así las cosas hacen muy cerca de tres años, desgraciadamente tengo varios motivos para poder fijar la fecha, la noche del 15 al 16 de noviembre de 1857. Volvía yo a las tres de la madrugada",
+      "valencia": -0.2,
+      "activacion": 0.35
+    },
+    {
+      "id": 31,
+      "inicio": 690.0,
+      "fin": 710.0,
+      "texto": "a aquella casita de la calle de Jardines, cerca de la calle de la Montera, en que recordarás vivir por entonces. Acababa de salir, ahora tan avanzada y con un tiempo feroz de viento y frío, no de ningún nido amoroso, sino de, te lo diré, aunque te sorprendas, de una especie de casa de juego",
+      "valencia": -0.3,
+      "activacion": 0.4
+    },
+    {
+      "id": 32,
+      "inicio": 710.0,
+      "fin": 733.0,
+      "texto": "no conocida bajo este nombre por la policía, pero donde ya se habían arruinado muchas gentes y a la cual me habían llevado a mí aquella noche por primera y última vez. ¿Sabes que nunca he sido jugador? Entré allí engañado por un mal amigo, en la creencia de que todo iba a reducirse a trabar conocimiento con ciertas damas elegantes de virtud de quíboca,",
+      "valencia": -0.4,
+      "activacion": 0.4
+    },
+    {
+      "id": 33,
+      "inicio": 733.0,
+      "fin": 753.0,
+      "texto": "de mimón puro. Sobre texto de jugar algunos maravidises al enano, en mesa redonda con faldas de balleta. Y el caso fue que a eso de las doce comenzaron a llegar nuevos tertulios que iban del Teatro Real o de salones verdaderamente aristocráticos y mudóse de juego y salieron a reducir monedas de oro,",
+      "valencia": -0.2,
+      "activacion": 0.5
+    },
+    {
+      "id": 34,
+      "inicio": 753.0,
+      "fin": 773.0,
+      "texto": "después billetes y luego bonos escritos con lápiz. Y yo me enfrasqué poco a poco en la selva oscura del vicio, llena de fiebres y tentaciones, y perdí todo lo que llevaba y todo lo que poseía y aunque dé de bien de un dineral, con el pagaré correspondiente. Es decir, que me arruiné por completo",
+      "valencia": -0.65,
+      "activacion": 0.6
+    },
+    {
+      "id": 35,
+      "inicio": 773.0,
+      "fin": 794.0,
+      "texto": "y que sin la herencia y los grandes negocios que tuve enseguida, mi situación hubiera sido muy angustiosa y apurada. Volvía yo, digo, a mi casa aquella noche, tan adesora, yerto de frío, hambriento, con la vergüenza y el disgusto que puedes suponer, pensando más que en mí mismo, en mi anciano y enfermo padre,",
+      "valencia": -0.65,
+      "activacion": 0.4
+    },
+    {
+      "id": 36,
+      "inicio": 794.0,
+      "fin": 814.0,
+      "texto": "a quien tendría que escribir pidiéndole dinero, lo cual no podría menos de causarle tanto dolor como asombro, pues me consideraba en muy buena y desahogada posición. Cuando, a poco de penetrar en mi calle por el extremo que da, hará de peligros, y al pasar por delante de una casa recién construida de la cera que yo llevaba,",
+      "valencia": -0.55,
+      "activacion": 0.45
+    },
+    {
+      "id": 37,
+      "inicio": 814.0,
+      "fin": 839.0,
+      "texto": "advertí que en el hueco de su cerrada puerta estaba de pie, inmóvil y rígida, como si fuese de palo, una mujer muy alta y fuerte, como de sesenta años de edad, cuyos malignos y audaces ojos impestañas se clavaron en los míos como dos puñales, mientras que su desdentada boca me hizo una muerca horrible por vía de sonrisa.",
+      "valencia": -0.85,
+      "activacion": 0.85
+    },
+    {
+      "id": 38,
+      "inicio": 839.0,
+      "fin": 862.0,
+      "texto": "El propio terror o delirante miedo que se apoderó de mí instantáneamente dio me, no sé, qué percepción maravillosa para distinguir de golpe, o sea, en dos segundos que tardaría en pasar rozando con aquella repugnante visión los por menores más ligeros de su figura y de su traje. Voy a ver si coordinó mis impresiones del modo y forma que las recibí",
+      "valencia": -0.8,
+      "activacion": 0.8
+    },
+    {
+      "id": 39,
+      "inicio": 862.0,
+      "fin": 884.0,
+      "texto": "y tal y como se grabaron para siempre en mi cerebro a la mortecina luz del farol que alumbró con infernal relámpago tan fatídica escena. Pero me excito demasiado, aunque no es emotivo como verás más adelante. ¿Qué? Descuiza, sin embargo, por el estado de mi razón. Todavía no estoy loco.",
+      "valencia": -0.7,
+      "activacion": 0.7
+    },
+    {
+      "id": 40,
+      "inicio": 884.0,
+      "fin": 906.0,
+      "texto": "Lo primero que me chocó en aquella que, denominaré mujer, fue su elevadísima talla y la anchura de sus descarnados sombros. Luego, la redondez y fijeza de sus marchitos ojos de vuó, la enormidad de su saliente nariz y la gran mella central de su dentadura, que convertía su boca en una especie de oscuro agujero",
+      "valencia": -0.75,
+      "activacion": 0.65
+    },
+    {
+      "id": 41,
+      "inicio": 906.0,
+      "fin": 927.0,
+      "texto": "y, por último, su traje de mozuela de lavapies, el pañolillo nuevo de algodón que llevaba a la cabeza atado debajo de la barba y un diminuto abanico abierto que tenía en la mano y con el cual se cubría afectando pudor el centro del talle. Nada más ridículo y tremendo, nada más irrisorio y sarcástico",
+      "valencia": -0.6,
+      "activacion": 0.55
+    },
+    {
+      "id": 42,
+      "inicio": 927.0,
+      "fin": 949.0,
+      "texto": "que aquel abaniquillo en unas manos tan enormes, sirviendo como cetro de debilidad, a giganta tan fea, vieja y huesuda. Igual efecto producía el pañolejo de vistoso percal que adornaba su cara, comparado con aquella nariz de tajamar, aguileña, masculina, que me hizo creer un momento, no sin regocijo,",
+      "valencia": -0.55,
+      "activacion": 0.55
+    },
+    {
+      "id": 43,
+      "inicio": 949.0,
+      "fin": 973.0,
+      "texto": "que se trataría de un hombre disfrazado. Pero su cínica mirada y asquerosa sonrisa eran de vieja, de bruja, de chicera, de parca, no sé de qué, de algo que justificaba plenamente la aversión y el susto que me había causado toda mi vida a las mujeres que andaban solas de noche por la calle. Dijerase que, desde la cuna, había presentado yo aquel encuentro.",
+      "valencia": -0.8,
+      "activacion": 0.7
+    },
+    {
+      "id": 44,
+      "inicio": 973.0,
+      "fin": 993.0,
+      "texto": "Dijerase que lo temía por instinto, como cada ser animado teme y adivina, y ventea y reconoce a su antagonista natural antes de haber recibido de él ninguna ofensa, antes de haberlo visto, sólo con sentir sus pisadas. No he hecho a correr en cuanto vi a la esfinge de mi vida, menos por vergüenza o baronil de coro,",
+      "valencia": -0.75,
+      "activacion": 0.7
+    },
+    {
+      "id": 45,
+      "inicio": 993.0,
+      "fin": 1018.0,
+      "texto": "que por temora que mi propio miedo le revelase quién era yo, o le dié sealas para seguirme, para acometerme, para... no sé, los peligros que sueña el pánico no tienen forma ni nombre traducibles. Mi casa estaba al extremo opuesto de la prolongada y angosta calle en que me hallaba yo solo, enteramente solo, con aquella misteriosa estantigua a quien creía capaz de aniquilarme con una palabra.",
+      "valencia": -0.85,
+      "activacion": 0.8
+    },
+    {
+      "id": 46,
+      "inicio": 1018.0,
+      "fin": 1040.0,
+      "texto": "¿Qué hacer para llegar hasta allí? Ah, con que ansia veía a lo lejos la enchurosa y muy alumbrada calle de la Montera, donde a todas horas haya gentes de autoridad. Decidí, pues, sacar fuerzas de flaqueza, disimular y ocultar aquel pavor miserable, no acelerar el paso, pero ganar siempre terreno a una costa de años de vida y de salud,",
+      "valencia": -0.65,
+      "activacion": 0.75
+    },
+    {
+      "id": 47,
+      "inicio": 1040.0,
+      "fin": 1065.0,
+      "texto": "y de esta manera, poco a poco, irme acercando a mi casa, procurando, muy especialmente, no caerme antes redondo al suelo. Así caminaba. Así habrían dado ya, lo menos, 20 pasos desde que dejé atrás la puerta en que estaba escondida la mujer del abanico, cuando, de pronto, me ocurrió una idea horrible, espantosa y, sin embargo, muy racional.",
+      "valencia": -0.75,
+      "activacion": 0.8
+    },
+    {
+      "id": 48,
+      "inicio": 1065.0,
+      "fin": 1085.0,
+      "texto": "La idea de volver la cabeza a ver si me seguía mi enemiga. Una de dos, pensé con la rapidez del rayo. O mi terror tiene fundamento, o es una locura. Si tiene fundamento, esa mujer habrá echado detrás de mí, estará alcanzándome y no hay salvación para mí en el mundo.",
+      "valencia": -0.85,
+      "activacion": 0.85
+    },
+    {
+      "id": 49,
+      "inicio": 1085.0,
+      "fin": 1105.0,
+      "texto": "Y si es una locura, una apresión, un pánico como cualquier otro, me convenceré de ello en el presente caso y para todos los que me ocurran, al ver que esa pobre anciana se ha quedado en el hueco de aquella puerta, preservándose del frío o esperando a que le abran. Con lo cual, yo podré seguir marchando hacia mi casa muy tranquilamente",
+      "valencia": -0.45,
+      "activacion": 0.6
+    },
+    {
+      "id": 50,
+      "inicio": 1105.0,
+      "fin": 1127.0,
+      "texto": "y me habré curado de una manía que tanto me abochorna. Formulado este razonamiento, hice un esfuerzo extraordinario y volví la cabeza. ¡Ah, Gabriel, Gabriel, que desventura! La mujer alta me había seguido con sordos pasos. Estaba encima de mí. Casi me tocaba con el abanico. Casi asomaba su cabeza sobre mi hombro.",
+      "valencia": -0.95,
+      "activacion": 0.95
+    },
+    {
+      "id": 51,
+      "inicio": 1127.0,
+      "fin": 1150.0,
+      "texto": "¿Por qué? ¿Para qué, Gabriel mío? ¿Era una ladrona? Era efectivamente un hombre disfrazado. ¿Era una vieja irónica que había comprendido que le tenía miedo? Era el espectro de mi propia cobardía. Era el fantasma burlón de las decepciones y deficiencias humanas. Interminable sería decirte todas las cosas que pensé en un momento.",
+      "valencia": -0.8,
+      "activacion": 0.85
+    },
+    {
+      "id": 52,
+      "inicio": 1150.0,
+      "fin": 1172.0,
+      "texto": "El caso fue que di un grito y salí corriendo como un niño de cuatro años que juzga ver al coco y que no dejé de correr hasta que desembocé en la calle de la Montera. Una vez allí se me quitó el miedo como por el salmo. Y eso que la calle de la Montera estaba tan bien sola. Volví, pues, la cabeza hacia la de jardines",
+      "valencia": -0.6,
+      "activacion": 0.85
+    },
+    {
+      "id": 53,
+      "inicio": 1172.0,
+      "fin": 1195.0,
+      "texto": "que enfilaba en todas longitud y que estaba suficientemente alumbrada por sus tres faroles y por un reverbero de la calle de peligros para que no se me pudiese oscurecer la mujer alta si por si acaso había retrocedido en aquella dirección y vive el cielo que no la vi parada, ni andando, ni en manera alguna. Con todo, guardéme muy bien de penetrar de nuevo en mi calle.",
+      "valencia": -0.45,
+      "activacion": 0.6
+    },
+    {
+      "id": 54,
+      "inicio": 1195.0,
+      "fin": 1216.0,
+      "texto": "Esa abribona me dije, ¿se habrá metido en el hueco de otra puerta? Pero mientras sigan alumbrando los faroles, no se moverá sin que yo no lo note desde aquí. En esto voy a aparecer a un sereno por la calle del Caballero de Gracia y lo llamése en desviarme de mi sitio. Dígele, para justificar la llamada y excitar su celo,",
+      "valencia": -0.4,
+      "activacion": 0.6
+    },
+    {
+      "id": 55,
+      "inicio": 1216.0,
+      "fin": 1237.0,
+      "texto": "que en la calle de jardines había un hombre vestido de mujer, que entras en dicha calle por la de peligros, a la cual debía dirigirse por la de aduana, que yo permanecería quieto en aquella otra salida y que con tal medio no podía escapársenos el que a todas luces era un ladrón o un asesino. Obedeció el sereno, tomó por la calle de la aduana",
+      "valencia": -0.35,
+      "activacion": 0.6
+    },
+    {
+      "id": 56,
+      "inicio": 1237.0,
+      "fin": 1257.0,
+      "texto": "y cuando yo vi avanzar su farol por el otro lado de las de jardines, penetré también en ella resueltamente. Pronto nos reunimos en su promedio, sin que ni el uno ni el otro hubiéramos encontrado a nadie, a pesar de haber registrado puerta por puerta. ¿Se habrá metido en alguna casa? dijo el sereno.",
+      "valencia": -0.4,
+      "activacion": 0.55
+    },
+    {
+      "id": 57,
+      "inicio": 1257.0,
+      "fin": 1277.0,
+      "texto": "¿Eso será? respondí yo abriendo la puerta de la mía, confirmé resolución de mudarme a otra calle el día siguiente. Pocos momentos después, hallábame dentro de mi cuarto tercero, cuyo picaporte llevaba también siempre conmigo a fin de no molestar a mi buen criado José. Sin embargo, este me aguardaba aquella noche.",
+      "valencia": -0.35,
+      "activacion": 0.45
+    },
+    {
+      "id": 58,
+      "inicio": 1277.0,
+      "fin": 1297.0,
+      "texto": "Mis desgracias del 15 al 16 de noviembre no habían concluido. ¿Qué ocurre? le pregunté con extrañez. Aquí he estado. Me respondió vivamente conmovido, esperando a usted desde las 11 hasta las 2 y media el señor comandante Falcón, y me ha dicho que si venía a dormir a casa,",
+      "valencia": -0.6,
+      "activacion": 0.55
+    },
+    {
+      "id": 59,
+      "inicio": 1297.0,
+      "fin": 1318.0,
+      "texto": "no se desnudase, pues él volvería a la manecer. Semejantes palabras me dejaron frío de dolor y espanto, cual si me hubieran notificado mi propia muerte. Sabedor yo de que mi amadísimo padre, residente en Jaén, padecía aquel invierno frecuente y peligrosísimos ataques de su crónica enfermedad. Había escrito a mis hermanos que,",
+      "valencia": -0.8,
+      "activacion": 0.65
+    },
+    {
+      "id": 60,
+      "inicio": 1318.0,
+      "fin": 1339.0,
+      "texto": "en el caso de un reventino de ese enlace funesto, telegrafiase en al comandante Falcón, el cual me daría la noticia de la manera más conveniente. No me cabía, pues, duda de que mi padre había fallecido. Sentéme en la butaca a esperar el día y a mi amigo, y con ellos la noticia oficial de tan grande infortunio.",
+      "valencia": -0.85,
+      "activacion": 0.5
+    },
+    {
+      "id": 61,
+      "inicio": 1339.0,
+      "fin": 1359.0,
+      "texto": "Y Dios solo sabe cuánto padecí en aquellas dos horas de cruel expectativa, durante las cuales, lo que tiene relación con la presente historia, no podía separar en mi mente tres ideas distintas y, al parecer, heterogéneas que se empeñaban en formar monstruoso y tremendo grupo. Mi pérdida al juego, el encuentro con la mujer alta",
+      "valencia": -0.85,
+      "activacion": 0.55
+    },
+    {
+      "id": 62,
+      "inicio": 1359.0,
+      "fin": 1379.0,
+      "texto": "y la muerte de mi honrado padre. A las seis en punto penetró en mi despacho el comandante Falcón y me miró en silencio. Arrojéme en sus brazos llorando desconsoladamente y él exclamó acariciándome. ¡Lloras y hombre llora! Y, ojalá, ese dolor pudiera sentirse muchas veces.",
+      "valencia": -0.85,
+      "activacion": 0.6
+    },
+    {
+      "id": 63,
+      "inicio": 1379.0,
+      "fin": 1399.0,
+      "texto": "Mi amigo telésforo, continuó Gabriel después que hubo apurado otro vaso de vino, descansó también un momento al llegar a este punto y luego prosiguió en los términos siguientes. Si mi historia terminara aquí, ¿acaso no encontrarías nada de extraordinario ni sobrenatural en ella? Y podrías decirme lo mismo que por entonces",
+      "valencia": -0.3,
+      "activacion": 0.3
+    },
+    {
+      "id": 64,
+      "inicio": 1399.0,
+      "fin": 1420.0,
+      "texto": "me dijeron dos hombres de mucho juicio a quienes se la conté. Que cada persona de viva y ardiente imaginación tiene su terror pánico. Que el mío eran las trasnochadoras solitarias y que la vieja de la calle de jardines no pasaría de ser una pobre sin casa ni hogar que iba a pedir una limosna cuando yo lanzé el grito y salí corriendo.",
+      "valencia": -0.2,
+      "activacion": 0.3
+    },
+    {
+      "id": 65,
+      "inicio": 1420.0,
+      "fin": 1442.0,
+      "texto": "O bien una repugnante celestina de aquí al barrio no muy católico en materia de amores. También quise creerlo yo así. También lo llegué a creer al cabo de algunos meses. No obstante, lo cual hubiera dado entonces años de vida por la seguridad de no volver a encontrarme a la mujer alta. En cambio, hoy daría toda mi sangre por encontrarmela de nuevo.",
+      "valencia": -0.55,
+      "activacion": 0.55
+    },
+    {
+      "id": 66,
+      "inicio": 1442.0,
+      "fin": 1462.0,
+      "texto": "¿Para qué? Para matarla en el acto. No te comprendo. Me comprenderá si te digo que volví a tropezar con ella hace tres semanas. Pocas horas antes de recibir la nueva fatal de la muerte de mi pobre Joaquina. Cuéntame, cuéntame. Poco más tengo que decirte.",
+      "valencia": -0.7,
+      "activacion": 0.65
+    },
+    {
+      "id": 67,
+      "inicio": 1462.0,
+      "fin": 1483.0,
+      "texto": "Eran las cinco de la madrugada. Volví a ello de pasar la última noche. No diré de amor, sino de amarguísimos lloros y desgarradora contienda con mi antigua querida la viuda de... de quién érame, ya preciso separarme, por haberse publicado mi casamiento con la otra infeliz, a quien estaban enterrando en Santa Águeda aquella misma hora.",
+      "valencia": -0.75,
+      "activacion": 0.5
+    },
+    {
+      "id": 68,
+      "inicio": 1483.0,
+      "fin": 1506.0,
+      "texto": "Todavía no era día completo, pero ya clareaba el alba en las calles enfiladas hacia Oriente. Acababan de apagar los faroles y habían de ser retirados los serenos cuando, al ir a cortar la calle del Prado, o sea, al pasar de una a otra sección de la calle del Lobo, cruzó por delante de mí, como viniendo de la Plaza de las Cortes y dirigiéndose a la de Santa Ana,",
+      "valencia": -0.4,
+      "activacion": 0.45
+    },
+    {
+      "id": 69,
+      "inicio": 1506.0,
+      "fin": 1530.0,
+      "texto": "la espantosa mujer de la calle de Jardines. No me miró y creí que no me había visto. Llevaba la misma vestimenta y el mismo abanico que hace tres años. Mi azoramiento y cobardía fueron mayores que nunca. Corté rapidísimamente la calle del Prado, luego que ella pasó bien que sin quitarle ojo para asegurarme que no volvía la cabeza.",
+      "valencia": -0.8,
+      "activacion": 0.75
+    },
+    {
+      "id": 70,
+      "inicio": 1530.0,
+      "fin": 1551.0,
+      "texto": "Y cuando hubo penetrado en la otra sección de la calle del Lobo, respidé como si acabara de pasar a Nado una impetuosa corriente. Y apresuré de nuevo mi marcha hacia acá, con más regocijo que miedo, pues consideraba vencida y anulada a la odiosa bruja, en el mero hecho de haber estado tan próximo de ella sin que me viése.",
+      "valencia": -0.1,
+      "activacion": 0.55
+    },
+    {
+      "id": 71,
+      "inicio": 1552.0,
+      "fin": 1575.0,
+      "texto": "De pronto, y cerca allá de mi casa, acometióme como un vértigo de terror, pensando en si la muita y mada vieja me habría visto y conocido. Si se habría hecho la desentendida para dejarme penetrar en la todavía oscura calle del Lobo y asaltarme allí impunemente. En si vendría atrás de mí, en si ya la tendría encima.",
+      "valencia": -0.85,
+      "activacion": 0.85
+    },
+    {
+      "id": 72,
+      "inicio": 1575.0,
+      "fin": 1596.0,
+      "texto": "Vuelvo en menesto y allí estaba, allí, a mi espalda, casi tocándome con sus ropas, mirándome con sus viles o juelos, mostrándome la asquerosa mella de su dentadura, abanicándose irrisoriamente como si se burlara de mi poril espanto. Pasé del terror a la más insensata ira,",
+      "valencia": -0.95,
+      "activacion": 0.95
+    },
+    {
+      "id": 73,
+      "inicio": 1596.0,
+      "fin": 1617.0,
+      "texto": "a la furia salvaje de la desesperación, y arrojé me sobre el corpulente vejeztorio, tiré lo contra la pared, echándole una mano a la garganta y con la otra, que asco, puse me a palpar su cara, su seno, el lío ruín de sus cabellos rusios, hasta que me convencí juntamente de que era criatura humana y mujer.",
+      "valencia": -0.9,
+      "activacion": 1.0
+    },
+    {
+      "id": 74,
+      "inicio": 1617.0,
+      "fin": 1638.0,
+      "texto": "Ella había lanzado entre tanto un obvido ronco y agudo al propio tiempo que me pareció falso o fingido, como expresión hipócrita de un dolor y de un miedo que no sentía, y luego exclamó, haciendo como que lloraba, pero sin llorar. Antes bien, mirándome con ojos de llena. ¿Por qué le ha tomado usted conmigo?",
+      "valencia": -0.8,
+      "activacion": 0.85
+    },
+    {
+      "id": 75,
+      "inicio": 1638.0,
+      "fin": 1660.0,
+      "texto": "Esta frase aumentó mi favor y debilitó mi colera. ¿Luego usted recuerda? grite, haberme visto en otra parte. Ya lo creo, alma mía, respondió sardónicamente. La noche de San Eugenio en la calle de Jardines hace tres años. Sentí frío dentro de los tuétanos.",
+      "valencia": -0.85,
+      "activacion": 0.8
+    },
+    {
+      "id": 76,
+      "inicio": 1660.0,
+      "fin": 1683.0,
+      "texto": "¿Pero quién es usted? le dije sin soltarla. ¿Por qué corre detrás de mí? ¿Qué tiene usted que ver conmigo? Yo soy una débil mujer. Contestó diabólicamente. Usted me odia y me teme sin motivo. Si no, dígame usted, señor caballero, ¿por qué se asusto de aquel modo la primera vez que me vio?",
+      "valencia": -0.8,
+      "activacion": 0.8
+    },
+    {
+      "id": 77,
+      "inicio": 1683.0,
+      "fin": 1704.0,
+      "texto": "¿Por qué la borrezco a usted desde que nací? ¿Por qué es usted el demonio de mi vida? ¿De modo que usted me conocía hace mucho tiempo? Pues mira, hijo, yo también a ti. ¿Usted me conocía? ¿Desde cuándo? Desde antes que nacieras. Y cuando te vi pasar junto a mí hace tres años,",
+      "valencia": -0.85,
+      "activacion": 0.85
+    },
+    {
+      "id": 78,
+      "inicio": 1704.0,
+      "fin": 1726.0,
+      "texto": "me dije a mí misma, este es. Pero ¿quién soy yo para usted? ¿Quién es usted para mí? ¡El demonio! respondió la vieja escupiéndome en mitad de la cara, librándose de mis manos y echando a correr velozísimamente con las faldas levantadas hasta más arriba de las rodillas, y sin que sus pies moviesen ruido alguno al tocar la tierra.",
+      "valencia": -0.95,
+      "activacion": 0.95
+    },
+    {
+      "id": 79,
+      "inicio": 1726.0,
+      "fin": 1749.0,
+      "texto": "Y ocurra intentar alcanzarla. Además, por la carrera de San Jerónimo pasaba ya alguna gente, y por la calle del Prado también. Era completamente de día. La mujer alta siguió corriendo o volando hasta la calle de las huertas, alumbrada ya por el sol. Paróse allí a mirarme. Amenazóme una vez y otra vez esgrimió el abaniquillo cerrado",
+      "valencia": -0.75,
+      "activacion": 0.8
+    },
+    {
+      "id": 80,
+      "inicio": 1749.0,
+      "fin": 1771.0,
+      "texto": "y desapareció detrás de una esquina. Espera otro poco, Gabriel. No falles todavía este pleito en que se juegan mi alma en mi vida. Olleme dos minutos más. Cuando entré en mi casa, me encontré con el coronel Falcón, que acababa de llegar para decirme que mi Joaquina, mi novia, toda mi esperanza de dicha aventura sobre la tierra,",
+      "valencia": -0.75,
+      "activacion": 0.7
+    },
+    {
+      "id": 81,
+      "inicio": 1771.0,
+      "fin": 1794.0,
+      "texto": "había muerto el día anterior en Santa Águeda. El desgraciado padre se lo había telegrafiado a Falcón y estaba con el coronel Falcón. Y ahora que me lo dijere, a mí que debía haberlo adivinado una hora antes al encontrarme al demoria de mi vida. ¿Comprendes ahora qué necesito matar al enemiga innata de mi felicidad? Y esa inmunda vieja que es como el sarcasmo viviente de mi destino.",
+      "valencia": -0.9,
+      "activacion": 0.8
+    },
+    {
+      "id": 82,
+      "inicio": 1794.0,
+      "fin": 1816.0,
+      "texto": "Pero, ¿qué digo matar? ¿Es mujer? ¿Es criatura humana? ¿Por qué la he presentado desde que nací? ¿Por qué me reconoció al verme? No sé si es así, sino cuando me ha sucedido alguna desdicha. ¿Es Satanás? ¿Es la muerte? ¿Es la vida? ¿Es el anticristo?",
+      "valencia": -0.85,
+      "activacion": 0.8
+    },
+    {
+      "id": 83,
+      "inicio": 1816.0,
+      "fin": 1836.0,
+      "texto": "¿Quién es? ¿Qué es? Os hago gracias, mis queridos amigos, continuó Gabriel, de las reflexiones y argumentos que emplearía yo para ver de tranquilizar el esforo. Pues son los mismos, mismísimos que estáis vosotros preparando ahora para que en mi historia no pasa nada sobrenatural o sobrehumano.",
+      "valencia": -0.3,
+      "activacion": 0.4
+    },
+    {
+      "id": 84,
+      "inicio": 1836.0,
+      "fin": 1856.0,
+      "texto": "¿Vosotros diréis más? ¿Vosotros diréis que mi amigo estaba medio loco? Que lo estuvo siempre. Que cuando menos padecía la enfermedad moral, llamadas por unos terror pánico y por otros delirio emotivo. Que, aun siendo verdad, todo lo que refería acerca de la mujer alta",
+      "valencia": -0.3,
+      "activacion": 0.35
+    },
+    {
+      "id": 85,
+      "inicio": 1856.0,
+      "fin": 1876.0,
+      "texto": "habría que atribuirlo a coincidencias casuales de fechas y accidentes. Que aquella pobre vieja podía estar loca o ser una ratera, o una mendiga, o una surzidora de voluntades. Como se dijo así propio el héroe de mi cuento en un intervado de lucidez y buen sentido. Admirable su posición.",
+      "valencia": -0.15,
+      "activacion": 0.35
+    },
+    {
+      "id": 86,
+      "inicio": 1876.0,
+      "fin": 1896.0,
+      "texto": "Esclamaron los camaradas de Gabriel en variedad de formas. Eso mismo íbamos a contestar nosotros. Pues escuchad todavía unos momentos y veréis que yo me equivoqué entonces como vosotros o os equivocáis ahora. El que desganciadamente no se equivoco nunca fue teléforo. Ah, es mucho más fácil pronunciar la palabra locura",
+      "valencia": -0.2,
+      "activacion": 0.45
+    },
+    {
+      "id": 87,
+      "inicio": 1896.0,
+      "fin": 1917.0,
+      "texto": "que hallar explicación a ciertas cosas que pasan en la tierra. Habla, habla, voy allá. Y esta vez, por ser ya la última, reanudaré el hilo de mi historia sin beberme antes un vaso de vino. A los pocos días de aquella conversación con teléforo fui destinado a la provincia de Albacete",
+      "valencia": -0.2,
+      "activacion": 0.35
+    },
+    {
+      "id": 88,
+      "inicio": 1917.0,
+      "fin": 1937.0,
+      "texto": "en mi calidad de ingeniero de Montes y no habían transcurrido muchas semanas cuando supe, por un contratista de obras públicas, que mi infeliz amigo había sido atacado de una horrorosa ictericia que estaba enteramente verde postrado en un sillón sin trabajar ni querer ver a nadie, llorando de día y de noche",
+      "valencia": -0.75,
+      "activacion": 0.45
+    },
+    {
+      "id": 89,
+      "inicio": 1937.0,
+      "fin": 1958.0,
+      "texto": "con inconsolable amargura y que los médicos no tenían ya esperanza alguna en salvarlo. Porque no contestaba a mis cartas y hubo de reducirme a pedir noticias suyas al coronel Falcón, que cada vez me las daba más desfavorables y tristes. Después de cinco meses de ausencia, regresé a Madrid el mismo día que llegó el parte telegráfico",
+      "valencia": -0.75,
+      "activacion": 0.4
+    },
+    {
+      "id": 90,
+      "inicio": 1958.0,
+      "fin": 1978.0,
+      "texto": "de la Batalla de Tituán. Me acuerdo como de lo que hice ayer. Aquella noche compré la indispensable correspondencia de España y lo primero que leí en ella fue la noticia de que teléforo había fallecido y la invitación a su entierro para la mañana siguiente. Comprenderéis que no falte a la triste ceremonia.",
+      "valencia": -0.8,
+      "activacion": 0.45
+    },
+    {
+      "id": 91,
+      "inicio": 1978.0,
+      "fin": 1998.0,
+      "texto": "Al llegar a la Cementería de San Luis, a donde fui en uno de los coches más próximos al carro fúnebre, llamó mi atención una mujer de pueblo vieja y muy alta que se reía impiamente al ver bajar el féretro y que luego se colocó en ademán de triunfo delanteros enterradores, señalándoles con un abanico muy pequeño",
+      "valencia": -0.85,
+      "activacion": 0.75
+    },
+    {
+      "id": 92,
+      "inicio": 1998.0,
+      "fin": 2018.0,
+      "texto": "la galería que debían seguir para llegar a la abierta y ansiosa tumba. A la primera ojeada reconocí con asombro y pabura que era la implacable enemiga de teléforo, tal y como él me la había retratado, con su enorme nariz, con sus infernales ojos, con su asquerosa mella, con su pañolejo de percal",
+      "valencia": -0.85,
+      "activacion": 0.8
+    },
+    {
+      "id": 93,
+      "inicio": 2018.0,
+      "fin": 2039.0,
+      "texto": "y con aquel diminuto abanico que parecía en sus manos el cetro de impudor y de la mofa. Instantáneamente reparó en que yo la miraba y fijó en mí la vista de un modo particular, como reconociéndome, como dándose cuenta de que yo la reconocía, como enterada de que el difunto me había contado las escenas",
+      "valencia": -0.85,
+      "activacion": 0.8
+    },
+    {
+      "id": 94,
+      "inicio": 2039.0,
+      "fin": 2060.0,
+      "texto": "de la calle de jardines y de la del lobo, como desafiándome, como declarándome heredero del odio que había profesado a mi infortunado amigo. Confieso que entonces mi video fue superior a la maravilla que me causaban aquellas nuevas coincidencias o casualidades. Veía patente que alguna relación sobrenatural anterior",
+      "valencia": -0.9,
+      "activacion": 0.85
+    },
+    {
+      "id": 95,
+      "inicio": 2060.0,
+      "fin": 2080.0,
+      "texto": "a la vida terreno había existido entre la misteriosa, vieja y teléforo, pero en tal momento sólo me preocupaba en mi propia vida, mi propia alma, mi propia aventura, que correría peligro si llegaba a heredar semejante infortunio. La mujer alta se echó a reír y me señaló ignominiosamente con el abanico",
+      "valencia": -0.85,
+      "activacion": 0.85
+    },
+    {
+      "id": 96,
+      "inicio": 2080.0,
+      "fin": 2101.0,
+      "texto": "cual se hubiese leído en mi pensamiento y denunciase al público mi cobardía. Yo tuve que apoyarme en el brazo de un amigo para no caer al suelo y entonces ella hizo una demanda compasiva o desdeñoso, giró sobre los talones y penetró en el campo santo con la cabeza vuelta hacia mí, abanicándome y saludándome a un propio tiempo",
+      "valencia": -0.85,
+      "activacion": 0.85
+    },
+    {
+      "id": 97,
+      "inicio": 2101.0,
+      "fin": 2122.0,
+      "texto": "y contoneándose entre los muertos con no sé qué infernal coquetería hasta que, por último, desapareció para siempre en aquel laberinto de patios y columnatas llenos de tumbas. Y digo para siempre, porque han pasado 15 años y no he vuelto a verla. Si era criatura humana, ya debe de haber muerto",
+      "valencia": -0.65,
+      "activacion": 0.6
+    },
+    {
+      "id": 98,
+      "inicio": 2122.0,
+      "fin": 2144.0,
+      "texto": "y si no lo era, tengo la seguridad de que me ha desdeñado, con que, vamos a cuentas, decirme vuestra opinión acerca de tal curiosos hechos. ¿Los consideráis todavía naturales? Ocioso fuera que yo, el autor del cuento o historia que acabáis de leer, estampase aquí las contestaciones que dieron a Gabriel,",
+      "valencia": -0.3,
+      "activacion": 0.4
+    },
+    {
+      "id": 99,
+      "inicio": 2144.0,
+      "fin": 2171.0,
+      "texto": "sus compañeros y amigos, puesto que, al fin y a la postre, cada lector habrá de juzgar el caso según sus propias sensaciones y creencias. Prefiero, por consiguiente, hacer punto final en este párrafo, no sin dirigir el más cariñoso y expresivo saludo a cinco de los seis expedicionarios que pasaron juntos aquel inolvidable día en las frondosas cumbres del Guadarrama. Fin del capítulo 4.",
+      "valencia": 0.2,
+      "activacion": 0.15
+    }
+  ],
+  "fuente_audio": "https://archive.org/download/narraciones_inquietantes_2108_librivox/narracionesinquietantes_04_various_128kb.mp3",
+  "transcripcion": "Whisper small"
+}

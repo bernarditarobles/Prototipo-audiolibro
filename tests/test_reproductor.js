@@ -1,7 +1,8 @@
 // Prueba del reproductor en Chromium sin interfaz.
 //   python ejemplos/generar_demo.py --duracion 60 -o ejemplos/demo
 //   node tests/test_reproductor.js [segundos]
-// Sirve el repositorio por HTTP, carga la demo en modo experimento y verifica:
+// Otra obra: ANOTACION=/datos/x/anotacion.json AUDIO=/datos/x/x.mp3 CONDICION=minimo node tests/test_reproductor.js 2200
+// Sirve el repositorio por HTTP, carga la obra en modo experimento y verifica:
 // ecuaciones del mapeo, sincronización de los cambios de segmento, fps y bloqueo de pausa.
 const http = require("http");
 const fs = require("fs");
@@ -11,7 +12,11 @@ const { chromium } = require("playwright");
 
 const RAIZ = path.resolve(__dirname, "..");
 const SEGUNDOS = Number(process.argv[2] || 45);
-const TIPOS = { ".html": "text/html", ".json": "application/json", ".wav": "audio/wav", ".js": "text/javascript" };
+const ANOTACION = process.env.ANOTACION || "/ejemplos/demo/demo.json";
+const AUDIO = process.env.AUDIO || "/ejemplos/demo/demo.wav";
+const CONDICION = process.env.CONDICION || "minimo";
+const SALIDA = path.join(RAIZ, path.dirname(ANOTACION));
+const TIPOS = { ".html": "text/html", ".json": "application/json", ".wav": "audio/wav", ".mp3": "audio/mpeg", ".js": "text/javascript" };
 
 const servidor = http.createServer((req, res) => {
   const p = path.join(RAIZ, decodeURIComponent(new URL(req.url, "http://x").pathname));
@@ -36,7 +41,7 @@ const servidor = http.createServer((req, res) => {
   const errores = [];
   pagina.on("pageerror", (e) => errores.push(e.message));
 
-  const url = `http://localhost:${puerto}/reproductor/index.html?anotacion=/ejemplos/demo/demo.json&audio=/ejemplos/demo/demo.wav&condicion=minimo&modo=experimento&pantallaCompleta=0&participante=TEST`;
+  const url = `http://localhost:${puerto}/reproductor/index.html?anotacion=${ANOTACION}&audio=${AUDIO}&condicion=${CONDICION}&modo=experimento&pantallaCompleta=0&participante=TEST`;
   await pagina.goto(url);
 
   // Ecuaciones (1)-(5) y búsqueda binaria.
@@ -67,9 +72,9 @@ const servidor = http.createServer((req, res) => {
   assert.ok(sigue, "en modo experimento no se puede pausar");
 
   await pagina.waitForTimeout(SEGUNDOS * 1000 - 3500);
-  await pagina.screenshot({ path: path.join(RAIZ, "ejemplos/demo/captura.png") });
+  await pagina.screenshot({ path: path.join(SALIDA, `captura_${CONDICION}.png`) });
   const reg = await pagina.evaluate(() => window.registroCompleto());
-  fs.writeFileSync(path.join(RAIZ, "ejemplos/demo/registro_test.json"), JSON.stringify(reg, null, 2));
+  fs.writeFileSync(path.join(SALIDA, `registro_test_${CONDICION}.json`), JSON.stringify(reg, null, 2));
 
   console.log(JSON.stringify(reg.resumen, null, 2));
   console.log("cambios:", reg.cambios.map((c) => `${c.segmento}@${c.desfase_s}s`).join(" "));
