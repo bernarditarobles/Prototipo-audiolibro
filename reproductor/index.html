@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ambientación visual reactiva</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; color: #ddd; font: 16px/1.4 system-ui, sans-serif; overflow: hidden; }
+  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  #config { position: fixed; inset: 0; overflow: auto; background: #111; padding: 24px 16px; box-sizing: border-box; z-index: 2; }
+  #config form { max-width: 560px; margin: 0 auto; display: grid; gap: 14px; }
+  #config h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  label { display: grid; gap: 4px; font-size: .9rem; color: #aaa; }
+  input, select, button { font: inherit; padding: 8px; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; }
+  button { cursor: pointer; background: #2d4a6b; border-color: #3d6290; }
+  button:disabled { opacity: .5; cursor: default; }
+  .nota { font-size: .8rem; color: #888; }
+  #error { color: #f88; white-space: pre-wrap; }
+  #fin { position: fixed; inset: 0; display: none; place-items: center; z-index: 3; background: rgba(0,0,0,.85); text-align: center; }
+  #fin div { display: grid; gap: 12px; }
+  #dev { position: fixed; left: 12px; bottom: 12px; z-index: 1; display: none; gap: 8px; align-items: center; background: rgba(0,0,0,.55); padding: 8px; border-radius: 8px; font-size: .8rem; max-width: calc(100vw - 48px); flex-wrap: wrap; }
+  #dev audio { height: 32px; max-width: 100%; }
+</style>
+</head>
+<body>
+<canvas id="lienzo"></canvas>
+
+<div id="config">
+  <form id="formulario">
+    <h1>Ambientación visual reactiva para audiolibros</h1>
+    <label>Archivo de anotación (JSON del preprocesamiento)
+      <input type="file" id="archivoAnotacion" accept=".json,application/json">
+    </label>
+    <label>Audio de la narración
+      <input type="file" id="archivoAudio" accept="audio/*">
+    </label>
+    <label>Condición
+      <select id="condicion">
+        <option value="control">Control (pantalla fija)</option>
+        <option value="minimo" selected>Perfil mínimo</option>
+        <option value="llamativo">Perfil llamativo</option>
+      </select>
+    </label>
+    <label>Identificador del participante
+      <input type="text" id="participante" placeholder="P01" autocomplete="off">
+    </label>
+    <label>Modo
+      <select id="modo">
+        <option value="experimento">Experimento (sin pausa ni retroceso)</option>
+        <option value="desarrollo">Desarrollo (controles y panel de estado)</option>
+      </select>
+    </label>
+    <p class="nota">También se pueden pasar por URL: <code>?anotacion=ruta.json&amp;audio=ruta.mp3&amp;condicion=minimo&amp;modo=desarrollo</code>.</p>
+    <div id="error"></div>
+    <button type="submit" id="comenzar">Comenzar</button>
+  </form>
+</div>
+
+<div id="dev"><audio id="audio" preload="auto"></audio><span id="estado"></span></div>
+
+<div id="fin"><div>
+  <p>La sesión ha finalizado.</p>
+  <button id="descargar">Descargar registro de la sesión</button>
+</div></div>
+
+<script>
+"use strict";
+
+/* ===================== Núcleo: mapeo de la narración al color (IV-C) ===================== */
+const Ambientacion = (() => {
+  // Cuadro I. Perfiles de ambientación.
+  const PERFILES = {
+    minimo:    { S: [0.20, 0.45], L: [0.15, 0.35], dH: 20, tau: 6.0, k: 0.02 },
+    llamativo: { S: [0.70, 1.00], L: [0.40, 0.65], dH: 60, tau: 0.5, k: 0.15 },
+    // Control: fondo neutro y estático (VI-B). Sin matiz, sin transición, sin modulación.
+    control:   { estatico: { H: 0, S: 0, L: 0.25 } },
+  };
+
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+
+  // Ecuaciones (1)-(3): valores objetivo del segmento i.
+  function objetivo(perfil, H0, v, a) {
+    const S = perfil.S[0] + a * (perfil.S[1] - perfil.S[0]);
+    const L = perfil.L[0] + a * (perfil.L[1] - perfil.L[0]);
+    const H = H0 + v * perfil.dH;
+    return { H: ((H % 360) + 360) % 360, S, L };
+  }
+
+  // Ecuación (4): suavizado exponencial. El matiz sigue el camino angular más corto.
+  function suavizar(actual, meta, dt, tau) {
+    const f = 1 - Math.exp(-dt / tau);
+    let dH = meta.H - actual.H;
+    dH = ((dH + 540) % 360) - 180;
+    return {
+      H: (((actual.H + f * dH) % 360) + 360) % 360,
+      S: actual.S + f * (meta.S - actual.S),
+      L: actual.L + f * (meta.L - actual.L),
+    };
+  }
+
+  // Ecuación (5): luminosidad mostrada = suavizada + k·r(t).
+  function luminosidadMostrada(Ls, k, r) { return clamp(Ls + k * clamp(r, 0, 1), 0, 1); }
+
+  // Segmento activo por búsqueda binaria: último segmento con inicio <= t.
+  // Los huecos entre segmentos conservan el último segmento iniciado.
+  function segmentoActivo(segmentos, t) {
+    let lo = 0, hi = segmentos.length - 1, res = -1;
+    while (lo <= hi) {
+      const m = (lo + hi) >> 1;
+      if (segmentos[m].inicio <= t) { res = m; lo = m + 1; } else hi = m - 1;
+    }
+    return res;
+  }
+
+  function validarAnotacion(doc) {
+    const errores = [];
+    if (!doc || !Array.isArray(doc.segmentos) || doc.segmentos.length === 0) errores.push("No hay segmentos.");
+    else doc.segmentos.forEach((s, i) => {
+      if (!(typeof s.inicio === "number" && typeof s.fin === "number" && s.fin >= s.inicio)) errores.push(`Segmento ${i}: tiempos inválidos.`);
+      if (!(s.valencia >= -1 && s.valencia <= 1)) errores.push(`Segmento ${i}: valencia fuera de [-1, 1].`);
+      if (!(s.activacion >= 0 && s.activacion <= 1)) errores.push(`Segmento ${i}: activación fuera de [0, 1].`);
+      if (i > 0 && s.inicio < doc.segmentos[i - 1].inicio) errores.push(`Segmento ${i}: no está ordenado en el tiempo.`);
+    });
+    return errores;
+  }
+
+  return { PERFILES, objetivo, suavizar, luminosidadMostrada, segmentoActivo, validarAnotacion };
+})();
+window.Ambientacion = Ambientacion;
+
+/* ===================== Reproductor (IV-B2, V) ===================== */
+const $ = (id) => document.getElementById(id);
+const lienzo = $("lienzo"), ctx = lienzo.getContext("2d", { alpha: false });
+const audio = $("audio");
+
+const sesion = {
+  doc: null, condicion: "minimo", modo: "experimento", participante: "",
+  perfil: null, H0: 210,
+  color: null, segIdx: -1, r: 0, picoRMS: 1e-3,
+  registro: { cambios: [], fps: [], eventos: [] },
+  ultimoT: null, cuadrosSeg: 0, inicioSeg: 0, cuadrosLentos: 0, terminado: false,
+};
+window.sesion = sesion; // acceso para verificación automatizada
+
+let analizador = null, bufRMS = null;
+
+function dimensionar() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  // Resolución reducida: el gradiente es difuso y así se aligera el dibujo.
+  const escala = 0.5;
+  lienzo.width = Math.max(1, Math.round(innerWidth * dpr * escala));
+  lienzo.height = Math.max(1, Math.round(innerHeight * dpr * escala));
+}
+addEventListener("resize", dimensionar);
+dimensionar();
+
+function hsl(H, S, L) { return `hsl(${H.toFixed(2)} ${(S * 100).toFixed(2)}% ${(L * 100).toFixed(2)}%)`; }
+
+// Paso 4: gradiente radial difuso a pantalla completa, sin formas ni figuras (R3).
+function dibujar(H, S, L) {
+  const w = lienzo.width, h = lienzo.height;
+  const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.hypot(w, h) / 2);
+  g.addColorStop(0, hsl(H, S, L));
+  g.addColorStop(1, hsl(H, S, L * 0.55));
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+}
+
+// Paso 1: energía RMS normalizada r(t) ∈ [0, 1]. La normalización usa un pico
+// que decae lentamente, para adaptarse al volumen de grabación de cada narrador.
+function leerEnergia(dt) {
+  if (!analizador) return 0;
+  analizador.getFloatTimeDomainData(bufRMS);
+  let suma = 0;
+  for (let i = 0; i < bufRMS.length; i++) suma += bufRMS[i] * bufRMS[i];
+  const rms = Math.sqrt(suma / bufRMS.length);
+  sesion.picoRMS = Math.max(rms, sesion.picoRMS * Math.exp(-dt / 30), 1e-3);
+  return Math.min(1, rms / sesion.picoRMS);
+}
+
+function cuadro(ahora) {
+  if (sesion.terminado) return;
+  const dt = sesion.ultimoT === null ? 0 : Math.min((ahora - sesion.ultimoT) / 1000, 0.25);
+  sesion.ultimoT = ahora;
+  registrarFps(ahora, dt);
+
+  const t = audio.currentTime;
+  const p = sesion.perfil;
+
+  if (p.estatico) {
+    dibujar(p.estatico.H, p.estatico.S, p.estatico.L);
+  } else {
+    // Paso 1
+    sesion.r = leerEnergia(dt);
+    // Paso 2
+    const idx = Ambientacion.segmentoActivo(sesion.doc.segmentos, t);
+    if (idx !== sesion.segIdx) {
+      if (idx >= 0) {
+        const s = sesion.doc.segmentos[idx];
+        sesion.registro.cambios.push({
+          segmento: idx, inicio_segmento: s.inicio, t_audio: +t.toFixed(4),
+          desfase_s: +(t - s.inicio).toFixed(4), t_reloj_ms: +ahora.toFixed(1), reproduciendo: !audio.paused,
+        });
+      }
+      sesion.segIdx = idx;
+    }
+    // Paso 3
+    const s = idx >= 0 ? sesion.doc.segmentos[idx] : { valencia: 0, activacion: 0 };
+    const meta = Ambientacion.objetivo(p, sesion.H0, s.valencia, s.activacion);
+    sesion.color = sesion.color ? Ambientacion.suavizar(sesion.color, meta, dt, p.tau) : meta;
+    const L = Ambientacion.luminosidadMostrada(sesion.color.L, p.k, audio.paused ? 0 : sesion.r);
+    // Paso 4
+    dibujar(sesion.color.H, sesion.color.S, L);
+  }
+
+  if (sesion.modo === "desarrollo") actualizarEstado(t);
+  requestAnimationFrame(cuadro);
+}
+
+// Fluidez: cuadros por segundo de cada segundo de la sesión.
+function registrarFps(ahora, dt) {
+  if (!sesion.inicioSeg) sesion.inicioSeg = ahora;
+  sesion.cuadrosSeg++;
+  if (dt > 1 / 30) sesion.cuadrosLentos++;
+  if (ahora - sesion.inicioSeg >= 1000) {
+    sesion.registro.fps.push({
+      t_audio: +audio.currentTime.toFixed(2),
+      fps: +(sesion.cuadrosSeg * 1000 / (ahora - sesion.inicioSeg)).toFixed(2),
+      cuadros_lentos: sesion.cuadrosLentos,
+    });
+    sesion.cuadrosSeg = 0; sesion.cuadrosLentos = 0; sesion.inicioSeg = ahora;
+  }
+}
+
+function actualizarEstado(t) {
+  const c = sesion.color, f = sesion.registro.fps.at(-1);
+  $("estado").textContent =
+    `t=${t.toFixed(1)} s · seg=${sesion.segIdx} · ` +
+    (c ? `H=${c.H.toFixed(0)} S=${c.S.toFixed(2)} L=${c.L.toFixed(2)} r=${sesion.r.toFixed(2)} · ` : "") +
+    (f ? `${f.fps} fps` : "");
+}
+
+function evento(tipo, extra = {}) {
+  sesion.registro.eventos.push({ tipo, t_audio: +audio.currentTime.toFixed(3), t_reloj: new Date().toISOString(), ...extra });
+}
+
+/* ---------- Bloqueo de pausa y retroceso en modo experimento (VI-B) ---------- */
+function bloquearControles() {
+  let ultimaPos = 0;
+  audio.addEventListener("timeupdate", () => { if (!audio.seeking) ultimaPos = audio.currentTime; });
+  audio.addEventListener("seeking", () => {
+    if (Math.abs(audio.currentTime - ultimaPos) > 0.5) { evento("intento_salto"); audio.currentTime = ultimaPos; }
+  });
+  audio.addEventListener("pause", () => {
+    if (!audio.ended && !sesion.terminado) { evento("pausa_no_permitida"); audio.play().catch(() => {}); }
+  });
+  addEventListener("keydown", (e) => { if ([" ", "k", "ArrowLeft", "ArrowRight", "j", "l"].includes(e.key)) e.preventDefault(); }, true);
+  if ("mediaSession" in navigator) {
+    for (const a of ["pause", "seekbackward", "seekforward", "seekto", "previoustrack", "nexttrack"]) {
+      try { navigator.mediaSession.setActionHandler(a, () => evento("accion_multimedia_bloqueada", { accion: a })); } catch (_) {}
+    }
+  }
+}
+
+/* ---------- Registro de la sesión ---------- */
+function registroCompleto() {
+  const fps = sesion.registro.fps.map((x) => x.fps);
+  const desf = sesion.registro.cambios.filter((c) => c.reproduciendo).map((c) => Math.abs(c.desfase_s));
+  const media = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : null);
+  return {
+    participante: sesion.participante, condicion: sesion.condicion, modo: sesion.modo,
+    titulo: sesion.doc?.titulo ?? "", matiz_base: sesion.H0, perfil: Ambientacion.PERFILES[sesion.condicion],
+    agente: navigator.userAgent, pantalla: { ancho: screen.width, alto: screen.height, dpr: devicePixelRatio },
+    resumen: {
+      duracion_audio_s: audio.duration || null,
+      fps_medio: media(fps), fps_minimo: fps.length ? Math.min(...fps) : null,
+      desfase_medio_s: media(desf), desfase_max_s: desf.length ? Math.max(...desf) : null,
+    },
+    ...sesion.registro,
+  };
+}
+window.registroCompleto = registroCompleto;
+
+function descargarRegistro() {
+  const blob = new Blob([JSON.stringify(registroCompleto(), null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  const fecha = new Date().toISOString().replace(/[:.]/g, "-");
+  a.href = URL.createObjectURL(blob);
+  a.download = `registro_${sesion.participante || "sin-id"}_${sesion.condicion}_${fecha}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+$("descargar").addEventListener("click", descargarRegistro);
+
+audio.addEventListener("ended", () => {
+  evento("fin");
+  sesion.terminado = true;
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  $("fin").style.display = "grid";
+});
+
+/* ---------- Carga e inicio ---------- */
+async function leerJSON(fuente) {
+  if (fuente instanceof File) return JSON.parse(await fuente.text());
+  const r = await fetch(fuente);
+  if (!r.ok) throw new Error(`No se pudo cargar ${fuente} (${r.status})`);
+  return r.json();
+}
+
+const params = new URLSearchParams(location.search);
+for (const k of ["condicion", "modo", "participante"]) if (params.get(k)) $(k).value = params.get(k);
+
+$("formulario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("error").textContent = "";
+  try {
+    const fAnot = $("archivoAnotacion").files[0] || params.get("anotacion");
+    const fAudio = $("archivoAudio").files[0] || params.get("audio");
+    if (!fAnot || !fAudio) throw new Error("Selecciona el archivo de anotación y el audio.");
+
+    const doc = await leerJSON(fAnot);
+    const errores = Ambientacion.validarAnotacion(doc);
+    if (errores.length) throw new Error("Anotación inválida:\n" + errores.slice(0, 10).join("\n"));
+
+    sesion.doc = doc;
+    sesion.H0 = typeof doc.matiz_base === "number" ? doc.matiz_base : 210;
+    sesion.condicion = $("condicion").value;
+    sesion.modo = $("modo").value;
+    sesion.participante = $("participante").value.trim();
+    sesion.perfil = Ambientacion.PERFILES[sesion.condicion];
+    if (!sesion.perfil) throw new Error("Condición desconocida: " + sesion.condicion);
+
+    audio.src = fAudio instanceof File ? URL.createObjectURL(fAudio) : fAudio;
+
+    // Web Audio API: AnalyserNode entrega la señal para calcular r(t).
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const fuente = ac.createMediaElementSource(audio);
+    analizador = ac.createAnalyser();
+    analizador.fftSize = 2048;
+    bufRMS = new Float32Array(analizador.fftSize);
+    fuente.connect(analizador);
+    analizador.connect(ac.destination);
+    await ac.resume();
+
+    if (sesion.modo === "experimento") {
+      bloquearControles();
+      document.body.style.cursor = "none";
+      if (params.get("pantallaCompleta") !== "0") await document.documentElement.requestFullscreen?.().catch(() => {});
+    } else {
+      audio.controls = true;
+      $("dev").style.display = "flex";
+    }
+
+    $("config").style.display = "none";
+    evento("inicio", { condicion: sesion.condicion });
+    requestAnimationFrame(cuadro);
+    await audio.play();
+  } catch (err) {
+    $("error").textContent = err.message || String(err);
+  }
+});
+
+// Atajo del operador: Ctrl+Shift+L descarga el registro en cualquier momento.
+addEventListener("keydown", (e) => { if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "l") descargarRegistro(); });
+</script>
+</body>
+</html>
