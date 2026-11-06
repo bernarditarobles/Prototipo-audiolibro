@@ -1,0 +1,286 @@
+{
+  "participante": "TEST",
+  "condicion": "llamativo",
+  "modo": "experimento",
+  "titulo": "La mujer alta (Pedro A. de Alarcón)",
+  "matiz_base": 210,
+  "perfil": {
+    "S": [
+      0.7,
+      1
+    ],
+    "L": [
+      0.4,
+      0.65
+    ],
+    "dH": 60,
+    "tau": 0.5,
+    "k": 0.15
+  },
+  "agente": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+  "pantalla": {
+    "ancho": 800,
+    "alto": 450,
+    "dpr": 1
+  },
+  "resumen": {
+    "duracion_audio_s": 2176.088912,
+    "fps_medio": 59.88931818181818,
+    "fps_minimo": 54.1,
+    "desfase_medio_s": 0.0048,
+    "desfase_max_s": 0.0096
+  },
+  "cambios": [
+    {
+      "segmento": 0,
+      "inicio_segmento": 0,
+      "t_audio": 0,
+      "desfase_s": 0,
+      "t_reloj_ms": 121.7,
+      "reproduciendo": true
+    },
+    {
+      "segmento": 1,
+      "inicio_segmento": 22,
+      "t_audio": 22.0096,
+      "desfase_s": 0.0096,
+      "t_reloj_ms": 22287.5,
+      "reproduciendo": true
+    }
+  ],
+  "fps": [
+    {
+      "t_audio": 0.96,
+      "fps": 60.99,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 1.96,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 2.96,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 3.98,
+      "fps": 60.01,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 4.98,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 5.98,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 6.99,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 8.01,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 9.03,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 10.04,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 11.06,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 12.06,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 12.98,
+      "fps": 54.1,
+      "cuadros_lentos": 1
+    },
+    {
+      "t_audio": 13.99,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 15.01,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 16.03,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 17.04,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 18.04,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 19.04,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 20.06,
+      "fps": 60.01,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 21.06,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 22.06,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 23.08,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 24.08,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 25.08,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 26.09,
+      "fps": 60.01,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 27.09,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 28.09,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 29.11,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 30.11,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 31.13,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 32.13,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 33.14,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 34.14,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 35.16,
+      "fps": 60.01,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 36.16,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 37.17,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 38.17,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 39.19,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 40.21,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 41.22,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 42.22,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 43.24,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 44.26,
+      "fps": 60,
+      "cuadros_lentos": 0
+    }
+  ],
+  "eventos": [
+    {
+      "tipo": "inicio",
+      "t_audio": 0,
+      "t_reloj": "2026-11-06T18:29:11.618Z",
+      "condicion": "llamativo"
+    },
+    {
+      "tipo": "pausa_no_permitida",
+      "t_audio": 3.01,
+      "t_reloj": "2026-11-06T18:29:14.677Z"
+    }
+  ]
+}
