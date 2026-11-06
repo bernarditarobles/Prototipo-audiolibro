@@ -1,0 +1,4 @@
+anthropic>=2.0
+pydantic>=2.0
+openai-whisper   # requiere ffmpeg instalado en el sistema
+pytest           # solo para las pruebas
