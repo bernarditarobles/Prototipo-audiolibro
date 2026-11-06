@@ -25,10 +25,10 @@
   },
   "resumen": {
     "duracion_audio_s": 2176.088912,
-    "fps_medio": 59.88931818181818,
-    "fps_minimo": 54.1,
-    "desfase_medio_s": 0.0048,
-    "desfase_max_s": 0.0096
+    "fps_medio": 60.023181818181826,
+    "fps_minimo": 59.99,
+    "desfase_medio_s": 0.00045,
+    "desfase_max_s": 0.0009
   },
   "cambios": [
     {
@@ -36,236 +36,236 @@
       "inicio_segmento": 0,
       "t_audio": 0,
       "desfase_s": 0,
-      "t_reloj_ms": 121.7,
+      "t_reloj_ms": 117.6,
       "reproduciendo": true
     },
     {
       "segmento": 1,
       "inicio_segmento": 22,
-      "t_audio": 22.0096,
-      "desfase_s": 0.0096,
-      "t_reloj_ms": 22287.5,
+      "t_audio": 22.0009,
+      "desfase_s": 0.0009,
+      "t_reloj_ms": 22166.7,
       "reproduciendo": true
     }
   ],
   "fps": [
     {
-      "t_audio": 0.96,
+      "t_audio": 0.97,
       "fps": 60.99,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 1.96,
-      "fps": 60,
+      "t_audio": 1.97,
+      "fps": 59.99,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 2.96,
-      "fps": 60,
+      "t_audio": 2.98,
+      "fps": 60.01,
       "cuadros_lentos": 0
     },
     {
       "t_audio": 3.98,
+      "fps": 59.99,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 5,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 6.02,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 7.02,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 8.03,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 9.05,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 10.05,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 11.07,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 12.08,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 13.08,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 14.08,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 15.1,
       "fps": 60.01,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 4.98,
+      "t_audio": 16.1,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 5.98,
+      "t_audio": 17.12,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 6.99,
+      "t_audio": 18.12,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 8.01,
+      "t_audio": 19.12,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 9.03,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 10.04,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 11.06,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 12.06,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 12.98,
-      "fps": 54.1,
-      "cuadros_lentos": 1
-    },
-    {
-      "t_audio": 13.99,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 15.01,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 16.03,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 17.04,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 18.04,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 19.04,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 20.06,
+      "t_audio": 20.13,
       "fps": 60.01,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 21.06,
+      "t_audio": 21.13,
+      "fps": 59.99,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 22.15,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 22.06,
+      "t_audio": 23.16,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 23.08,
+      "t_audio": 24.16,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 24.08,
+      "t_audio": 25.18,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 25.08,
+      "t_audio": 26.2,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 26.09,
+      "t_audio": 27.21,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 28.23,
       "fps": 60.01,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 27.09,
+      "t_audio": 29.23,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 28.09,
+      "t_audio": 30.25,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 29.11,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 30.11,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 31.13,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 32.13,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 33.14,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 34.14,
-      "fps": 60,
-      "cuadros_lentos": 0
-    },
-    {
-      "t_audio": 35.16,
+      "t_audio": 31.26,
       "fps": 60.01,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 36.16,
+      "t_audio": 32.26,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 37.17,
+      "t_audio": 33.26,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 38.17,
+      "t_audio": 34.26,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 39.19,
+      "t_audio": 35.28,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 40.21,
+      "t_audio": 36.3,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 41.22,
+      "t_audio": 37.3,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 42.22,
+      "t_audio": 38.31,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 43.24,
+      "t_audio": 39.31,
       "fps": 60,
       "cuadros_lentos": 0
     },
     {
-      "t_audio": 44.26,
+      "t_audio": 40.33,
+      "fps": 60.01,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 41.33,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 42.35,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 43.35,
+      "fps": 60,
+      "cuadros_lentos": 0
+    },
+    {
+      "t_audio": 44.35,
       "fps": 60,
       "cuadros_lentos": 0
     }
@@ -274,13 +274,13 @@
     {
       "tipo": "inicio",
       "t_audio": 0,
-      "t_reloj": "2026-11-06T18:29:11.618Z",
+      "t_reloj": "2026-11-06T19:07:32.612Z",
       "condicion": "llamativo"
     },
     {
       "tipo": "pausa_no_permitida",
-      "t_audio": 3.01,
-      "t_reloj": "2026-11-06T18:29:14.677Z"
+      "t_audio": 3.016,
+      "t_reloj": "2026-11-06T19:07:35.668Z"
     }
   ]
 }

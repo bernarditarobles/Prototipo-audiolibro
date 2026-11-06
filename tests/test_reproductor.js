@@ -80,7 +80,8 @@ const servidor = http.createServer((req, res) => {
   console.log("cambios:", reg.cambios.map((c) => `${c.segmento}@${c.desfase_s}s`).join(" "));
   console.log("eventos:", reg.eventos.map((e) => e.tipo).join(", "));
   assert.deepStrictEqual(errores, []);
-  assert.ok(reg.cambios.filter((c) => c.reproduciendo).length >= Math.floor(SEGUNDOS / 20), "debe registrar cambios de segmento");
+  const alcanzados = await pagina.evaluate(() => sesion.doc.segmentos.filter((s) => s.inicio <= document.getElementById("audio").currentTime).length);
+  assert.strictEqual(new Set(reg.cambios.map((c) => c.segmento)).size, alcanzados, "debe registrar un cambio por cada segmento alcanzado");
   assert.ok(reg.resumen.desfase_max_s < 0.1, "desfase mayor a 100 ms");
   assert.ok(reg.eventos.some((e) => e.tipo === "pausa_no_permitida"));
   await navegador.close();
