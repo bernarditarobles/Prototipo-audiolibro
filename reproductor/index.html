@@ -6,20 +6,31 @@
 <title>Ambientación visual reactiva</title>
 <style>
   html, body { margin: 0; height: 100%; background: #000; color: #ddd; font: 16px/1.4 system-ui, sans-serif; overflow: hidden; }
-  canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
-  #config { position: fixed; inset: 0; overflow: auto; background: #111; padding: 24px 16px; box-sizing: border-box; z-index: 2; }
+  #lienzo { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+  #config { position: fixed; inset: 0; overflow: auto; background: #111; padding: 24px 16px; box-sizing: border-box; z-index: 3; }
   #config form { max-width: 560px; margin: 0 auto; display: grid; gap: 14px; }
   #config h1 { font-size: 1.3rem; margin: 0 0 4px; }
   label { display: grid; gap: 4px; font-size: .9rem; color: #aaa; }
+  label.fila { display: flex; gap: 8px; align-items: center; }
   input, select, button { font: inherit; padding: 8px; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; }
   button { cursor: pointer; background: #2d4a6b; border-color: #3d6290; }
-  button:disabled { opacity: .5; cursor: default; }
-  .nota { font-size: .8rem; color: #888; }
+  .nota { font-size: .8rem; color: #888; margin: 0; }
   #error { color: #f88; white-space: pre-wrap; }
-  #fin { position: fixed; inset: 0; display: none; place-items: center; z-index: 3; background: rgba(0,0,0,.85); text-align: center; }
+  #fin { position: fixed; inset: 0; display: none; place-items: center; z-index: 4; background: rgba(0,0,0,.85); text-align: center; }
   #fin div { display: grid; gap: 12px; }
-  #dev { position: fixed; left: 12px; bottom: 12px; z-index: 1; display: none; gap: 8px; align-items: center; background: rgba(0,0,0,.55); padding: 8px; border-radius: 8px; font-size: .8rem; max-width: calc(100vw - 48px); flex-wrap: wrap; }
-  #dev audio { height: 32px; max-width: 100%; }
+
+  /* Panel explicativo: solo en modo desarrollo */
+  #panel { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 2; display: none; gap: 8px; }
+  #panel.visible { display: grid; }
+  #subtitulo { justify-self: center; max-width: 900px; text-align: center; font-size: clamp(15px, 2.2vw, 22px); line-height: 1.35;
+    background: rgba(0,0,0,.55); padding: 8px 14px; border-radius: 8px; color: #f2f2f2; min-height: 1.35em; }
+  #tablero { background: rgba(0,0,0,.6); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; }
+  #datos { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .85rem; align-items: center; }
+  #muestra { width: 22px; height: 22px; border-radius: 50%; border: 1px solid rgba(255,255,255,.5); flex: none; }
+  #linea { width: 100%; height: 96px; display: block; cursor: pointer; }
+  #leyenda { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .75rem; color: #bbb; }
+  #leyenda i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 4px; }
+  #panel audio { width: 100%; height: 32px; }
 </style>
 </head>
 <body>
@@ -46,17 +57,29 @@
     </label>
     <label>Modo
       <select id="modo">
-        <option value="experimento">Experimento (sin pausa ni retroceso)</option>
-        <option value="desarrollo">Desarrollo (controles y panel de estado)</option>
+        <option value="desarrollo">Desarrollo (controles y panel explicativo)</option>
+        <option value="experimento">Experimento (pantalla completa, sin pausa ni retroceso)</option>
       </select>
     </label>
-    <p class="nota">También se pueden pasar por URL: <code>?anotacion=ruta.json&amp;audio=ruta.mp3&amp;condicion=minimo&amp;modo=desarrollo</code>.</p>
+    <p class="nota">En modo desarrollo, la tecla <b>E</b> muestra u oculta el panel explicativo y un clic en la línea de tiempo salta a ese momento.</p>
     <div id="error"></div>
     <button type="submit" id="comenzar">Comenzar</button>
   </form>
 </div>
 
-<div id="dev"><audio id="audio" preload="auto"></audio><span id="estado"></span></div>
+<div id="panel">
+  <div id="subtitulo"></div>
+  <div id="tablero">
+    <div id="datos"><span id="muestra"></span><span id="estado"></span></div>
+    <canvas id="linea"></canvas>
+    <div id="leyenda">
+      <span><i style="background:#fff"></i>valencia (−1 abajo, +1 arriba)</span>
+      <span><i style="background:#ffcf5a"></i>activación (0 abajo, 1 arriba)</span>
+      <span>banda: color objetivo de cada segmento</span>
+    </div>
+    <audio id="audio" preload="auto"></audio>
+  </div>
+</div>
 
 <div id="fin"><div>
   <p>La sesión ha finalizado.</p>
@@ -66,19 +89,27 @@
 <script>
 "use strict";
 
-/* ===================== Núcleo: mapeo de la narración al color (IV-C) ===================== */
+/* ===================== Núcleo: mapeo de la narración al estímulo (IV-C) ===================== */
 const Ambientacion = (() => {
-  // Cuadro I. Perfiles de ambientación.
+  // Cuadro I (ampliado). S, L, dH, tau y k definen el color (ecuaciones 1-5).
+  // vel, turb, contraste y varH definen la textura abstracta en movimiento:
+  //   vel  = velocidad de deriva de la niebla (unidades de textura por segundo), interpolada con a.
+  //   turb = turbulencia / deformación de la niebla, interpolada con a.
+  //   contraste = amplitud de la variación de luminosidad dentro de la textura.
+  //   varH = variación local de matiz (grados) dentro de la textura.
   const PERFILES = {
-    minimo:    { S: [0.20, 0.45], L: [0.15, 0.35], dH: 20, tau: 6.0, k: 0.02 },
-    llamativo: { S: [0.70, 1.00], L: [0.40, 0.65], dH: 60, tau: 0.5, k: 0.15 },
+    minimo:    { S: [0.20, 0.45], L: [0.15, 0.35], dH: 20, tau: 6.0, k: 0.02,
+                 vel: [0.012, 0.05], turb: [0.25, 0.65], contraste: 0.30, varH: 8 },
+    llamativo: { S: [0.70, 1.00], L: [0.40, 0.65], dH: 60, tau: 0.5, k: 0.15,
+                 vel: [0.10, 0.60], turb: [0.60, 1.40], contraste: 0.60, varH: 35 },
     // Control: fondo neutro y estático (VI-B). Sin matiz, sin transición, sin modulación.
     control:   { estatico: { H: 0, S: 0, L: 0.25 } },
   };
 
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const lerp = (r, t) => r[0] + t * (r[1] - r[0]);
 
-  // Ecuaciones (1)-(3): valores objetivo del segmento i.
+  // Ecuaciones (1)-(3): color objetivo del segmento i.
   function objetivo(perfil, H0, v, a) {
     const S = perfil.S[0] + a * (perfil.S[1] - perfil.S[0]);
     const L = perfil.L[0] + a * (perfil.L[1] - perfil.L[0]);
@@ -98,11 +129,16 @@ const Ambientacion = (() => {
     };
   }
 
+  // Suavizado escalar con la misma constante de tiempo (para la activación que mueve la textura).
+  function suavizarEscalar(x, meta, dt, tau) { return x + (1 - Math.exp(-dt / tau)) * (meta - x); }
+
   // Ecuación (5): luminosidad mostrada = suavizada + k·r(t).
   function luminosidadMostrada(Ls, k, r) { return clamp(Ls + k * clamp(r, 0, 1), 0, 1); }
 
+  // Parámetros de movimiento de la textura a partir de la activación suavizada.
+  function movimiento(perfil, a) { return { vel: lerp(perfil.vel, a), turb: lerp(perfil.turb, a) }; }
+
   // Segmento activo por búsqueda binaria: último segmento con inicio <= t.
-  // Los huecos entre segmentos conservan el último segmento iniciado.
   function segmentoActivo(segmentos, t) {
     let lo = 0, hi = segmentos.length - 1, res = -1;
     while (lo <= hi) {
@@ -124,19 +160,127 @@ const Ambientacion = (() => {
     return errores;
   }
 
-  return { PERFILES, objetivo, suavizar, luminosidadMostrada, segmentoActivo, validarAnotacion };
+  return { PERFILES, objetivo, suavizar, suavizarEscalar, luminosidadMostrada, movimiento, segmentoActivo, validarAnotacion };
 })();
 window.Ambientacion = Ambientacion;
 
+/* ===================== Renderizado: niebla abstracta (WebGL) con respaldo 2D ===================== */
+// Paso 4. Campo de niebla abstracta a pantalla completa, sin formas ni figuras (R3).
+// El color medio es el de las ecuaciones (1)-(5); la textura modula la luminosidad y,
+// levemente, el matiz alrededor de ese valor, y deriva a la velocidad fijada por la activación.
+function crearRenderizador(lienzo) {
+  const gl = lienzo.getContext("webgl", { antialias: false, alpha: false, preserveDrawingBuffer: true });
+  if (!gl) return crearRenderizador2D(lienzo);
+  const conRespaldo = (e) => {
+    // Un lienzo con contexto WebGL no admite contexto 2D: se reemplaza por uno nuevo.
+    console.warn("WebGL no disponible, se usa el gradiente 2D:", e);
+    const nuevo = lienzo.cloneNode();
+    lienzo.replaceWith(nuevo);
+    return crearRenderizador2D(nuevo);
+  };
+
+  const vs = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
+  const fs = `
+    precision highp float;
+    uniform vec2 uRes; uniform float uFase; uniform vec3 uHSL;
+    uniform float uTurb, uContraste, uVarH;
+    float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+    float ruido(vec2 p){
+      vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+    }
+    float fbm(vec2 p){
+      float v = 0.0, a = 0.5; mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
+      for (int i = 0; i < 5; i++) { v += a * ruido(p); p = m * p; a *= 0.5; }
+      return v;
+    }
+    vec3 hsl2rgb(vec3 c){
+      vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+      return c.z + c.y * (rgb - 0.5) * (1.0 - abs(2.0 * c.z - 1.0));
+    }
+    void main(){
+      vec2 uv = gl_FragCoord.xy / uRes;
+      vec2 p = (gl_FragCoord.xy - 0.5 * uRes) / min(uRes.x, uRes.y) * 2.2;
+      float t = uFase;
+      vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, 1.3) - vec2(0.7 * t, 0.0)));
+      vec2 r = vec2(fbm(p + 3.0 * uTurb * q + vec2(1.7, 9.2) + 0.5 * t),
+                    fbm(p + 3.0 * uTurb * q + vec2(8.3, 2.8) - 0.4 * t));
+      float n = fbm(p + 3.0 * uTurb * r);
+      float vineta = mix(1.0, 0.6, smoothstep(0.25, 0.85, length(uv - 0.5)));
+      float L = uHSL.z * (1.0 + uContraste * (n - 0.5) * 2.0) * vineta;
+      float H = uHSL.x / 360.0 + uVarH / 360.0 * (r.x - 0.5) * 2.0;
+      vec3 col = hsl2rgb(vec3(fract(H), uHSL.y, clamp(L, 0.0, 1.0)));
+      col += (hash(gl_FragCoord.xy + fract(t)) - 0.5) / 255.0; // tramado contra bandas
+      gl_FragColor = vec4(col, 1.0);
+    }`;
+  const compilar = (tipo, src) => {
+    const s = gl.createShader(tipo); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  };
+  let prog;
+  try {
+    prog = gl.createProgram();
+    gl.attachShader(prog, compilar(gl.VERTEX_SHADER, vs));
+    gl.attachShader(prog, compilar(gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  } catch (e) {
+    return conRespaldo(e);
+  }
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, "p");
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const u = (n) => gl.getUniformLocation(prog, n);
+  const U = { res: u("uRes"), fase: u("uFase"), hsl: u("uHSL"), turb: u("uTurb"), con: u("uContraste"), varH: u("uVarH") };
+
+  return {
+    tipo: "webgl", lienzo,
+    dibujar({ H, S, L, fase = 0, turb = 0, contraste = 0, varH = 0 }) {
+      gl.viewport(0, 0, lienzo.width, lienzo.height);
+      gl.uniform2f(U.res, lienzo.width, lienzo.height);
+      gl.uniform1f(U.fase, fase % 1000);
+      gl.uniform3f(U.hsl, H, S, L);
+      gl.uniform1f(U.turb, turb);
+      gl.uniform1f(U.con, contraste);
+      gl.uniform1f(U.varH, varH);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    },
+  };
+}
+
+function crearRenderizador2D(destino) {
+  // Respaldo sin WebGL: gradiente radial difuso (versión original del diseño).
+  const ctx = destino.getContext("2d", { alpha: false });
+  return {
+    tipo: "2d", lienzo: destino,
+    dibujar({ H, S, L }) {
+      const w = destino.width, h = destino.height;
+      const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.hypot(w, h) / 2);
+      g.addColorStop(0, hsl(H, S, L));
+      g.addColorStop(1, hsl(H, S, L * 0.6));
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+    },
+  };
+}
+
+function hsl(H, S, L) { return `hsl(${H.toFixed(2)} ${(S * 100).toFixed(2)}% ${(L * 100).toFixed(2)}%)`; }
+
 /* ===================== Reproductor (IV-B2, V) ===================== */
 const $ = (id) => document.getElementById(id);
-const lienzo = $("lienzo"), ctx = lienzo.getContext("2d", { alpha: false });
 const audio = $("audio");
+const render = crearRenderizador($("lienzo"));
+const lienzo = render.lienzo;
 
 const sesion = {
-  doc: null, condicion: "minimo", modo: "experimento", participante: "",
+  doc: null, condicion: "minimo", modo: "desarrollo", participante: "",
   perfil: null, H0: 210,
-  color: null, segIdx: -1, r: 0, picoRMS: 1e-3,
+  color: null, aSuave: 0, fase: 0, segIdx: -1, r: 0, picoRMS: 1e-3,
   registro: { cambios: [], fps: [], eventos: [] },
   ultimoT: null, cuadrosSeg: 0, inicioSeg: 0, cuadrosLentos: 0, terminado: false,
 };
@@ -146,25 +290,14 @@ let analizador = null, bufRMS = null;
 
 function dimensionar() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  // Resolución reducida: el gradiente es difuso y así se aligera el dibujo.
-  const escala = 0.5;
+  // Resolución reducida: la niebla es difusa y así se aligera el dibujo.
+  const escala = render.tipo === "webgl" ? 0.4 : 0.5;
   lienzo.width = Math.max(1, Math.round(innerWidth * dpr * escala));
   lienzo.height = Math.max(1, Math.round(innerHeight * dpr * escala));
+  if (sesion.doc) prepararLinea();
 }
 addEventListener("resize", dimensionar);
 dimensionar();
-
-function hsl(H, S, L) { return `hsl(${H.toFixed(2)} ${(S * 100).toFixed(2)}% ${(L * 100).toFixed(2)}%)`; }
-
-// Paso 4: gradiente radial difuso a pantalla completa, sin formas ni figuras (R3).
-function dibujar(H, S, L) {
-  const w = lienzo.width, h = lienzo.height;
-  const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.hypot(w, h) / 2);
-  g.addColorStop(0, hsl(H, S, L));
-  g.addColorStop(1, hsl(H, S, L * 0.55));
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, w, h);
-}
 
 // Paso 1: energía RMS normalizada r(t) ∈ [0, 1]. La normalización usa un pico
 // que decae lentamente, para adaptarse al volumen de grabación de cada narrador.
@@ -188,7 +321,7 @@ function cuadro(ahora) {
   const p = sesion.perfil;
 
   if (p.estatico) {
-    dibujar(p.estatico.H, p.estatico.S, p.estatico.L);
+    render.dibujar({ ...p.estatico });
   } else {
     // Paso 1
     sesion.r = leerEnergia(dt);
@@ -204,16 +337,20 @@ function cuadro(ahora) {
       }
       sesion.segIdx = idx;
     }
-    // Paso 3
+    // Paso 3: color (ecuaciones 1-5) y movimiento de la textura (activación suavizada)
     const s = idx >= 0 ? sesion.doc.segmentos[idx] : { valencia: 0, activacion: 0 };
     const meta = Ambientacion.objetivo(p, sesion.H0, s.valencia, s.activacion);
     sesion.color = sesion.color ? Ambientacion.suavizar(sesion.color, meta, dt, p.tau) : meta;
+    sesion.aSuave = Ambientacion.suavizarEscalar(sesion.aSuave, s.activacion, dt, p.tau);
+    const mov = Ambientacion.movimiento(p, sesion.aSuave);
+    if (!audio.paused) sesion.fase += dt * mov.vel;
     const L = Ambientacion.luminosidadMostrada(sesion.color.L, p.k, audio.paused ? 0 : sesion.r);
     // Paso 4
-    dibujar(sesion.color.H, sesion.color.S, L);
+    render.dibujar({ H: sesion.color.H, S: sesion.color.S, L, fase: sesion.fase, turb: mov.turb, contraste: p.contraste, varH: p.varH });
+    sesion.mov = mov;
   }
 
-  if (sesion.modo === "desarrollo") actualizarEstado(t);
+  if (sesion.modo === "desarrollo") actualizarPanel(t);
   requestAnimationFrame(cuadro);
 }
 
@@ -232,13 +369,108 @@ function registrarFps(ahora, dt) {
   }
 }
 
-function actualizarEstado(t) {
-  const c = sesion.color, f = sesion.registro.fps.at(-1);
-  $("estado").textContent =
-    `t=${t.toFixed(1)} s · seg=${sesion.segIdx} · ` +
-    (c ? `H=${c.H.toFixed(0)} S=${c.S.toFixed(2)} L=${c.L.toFixed(2)} r=${sesion.r.toFixed(2)} · ` : "") +
-    (f ? `${f.fps} fps` : "");
+/* ---------- Panel explicativo (solo modo desarrollo) ---------- */
+const linea = $("linea");
+let lineaFondo = null;
+
+function prepararLinea() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.round(linea.clientWidth * dpr)), h = Math.max(1, Math.round(linea.clientHeight * dpr));
+  linea.width = w; linea.height = h;
+  const segs = sesion.doc.segmentos, dur = duracionTotal();
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const g = c.getContext("2d");
+  const x = (t) => (t / dur) * w;
+  const banda = Math.round(h * 0.28);
+  // Banda: color objetivo de cada segmento con el perfil elegido.
+  segs.forEach((s, i) => {
+    const fin = i + 1 < segs.length ? segs[i + 1].inicio : Math.max(s.fin, dur);
+    const col = sesion.perfil.estatico ? sesion.perfil.estatico : Ambientacion.objetivo(sesion.perfil, sesion.H0, s.valencia, s.activacion);
+    g.fillStyle = hsl(col.H, col.S, Math.max(col.L, 0.12));
+    g.fillRect(x(s.inicio), h - banda, Math.ceil(x(fin) - x(s.inicio)) + 1, banda);
+  });
+  const alto = h - banda - 6, base = 3;
+  // Activación: área.
+  g.beginPath(); g.moveTo(0, base + alto);
+  segs.forEach((s, i) => {
+    const fin = i + 1 < segs.length ? segs[i + 1].inicio : dur;
+    const y = base + alto * (1 - s.activacion);
+    g.lineTo(x(s.inicio), y); g.lineTo(x(fin), y);
+  });
+  g.lineTo(w, base + alto); g.closePath();
+  g.fillStyle = "rgba(255,207,90,.6)"; g.fill();
+  // Línea de valencia 0.
+  g.strokeStyle = "rgba(255,255,255,.25)"; g.lineWidth = 1 * dpr;
+  g.beginPath(); g.moveTo(0, base + alto / 2); g.lineTo(w, base + alto / 2); g.stroke();
+  // Valencia: línea.
+  g.strokeStyle = "#fff"; g.lineWidth = 1.5 * dpr; g.beginPath();
+  segs.forEach((s, i) => {
+    const fin = i + 1 < segs.length ? segs[i + 1].inicio : dur;
+    const y = base + alto * (1 - (s.valencia + 1) / 2);
+    if (i === 0) g.moveTo(x(s.inicio), y); else g.lineTo(x(s.inicio), y);
+    g.lineTo(x(fin), y);
+  });
+  g.stroke();
+  lineaFondo = c;
 }
+
+function duracionTotal() {
+  const segs = sesion.doc.segmentos;
+  return Math.max(audio.duration || 0, segs[segs.length - 1].fin) || 1;
+}
+
+function textoActual(t) {
+  const seg = sesion.doc.segmentos[Math.max(0, sesion.segIdx)];
+  if (!seg) return "";
+  if (Array.isArray(seg.frases) && seg.frases.length) {
+    const i = Ambientacion.segmentoActivo(seg.frases, t);
+    return (seg.frases[Math.max(0, i)] || {}).texto || "";
+  }
+  return seg.texto;
+}
+
+let ultimoPanel = 0;
+function actualizarPanel(t) {
+  if (!$("panel").classList.contains("visible")) return;
+  const ahora = performance.now();
+  // Línea de tiempo con cursor (cada cuadro, es barato).
+  if (lineaFondo) {
+    const g = linea.getContext("2d");
+    g.clearRect(0, 0, linea.width, linea.height);
+    g.drawImage(lineaFondo, 0, 0);
+    const xc = (t / duracionTotal()) * linea.width;
+    g.fillStyle = "#fff"; g.fillRect(xc - 1, 0, 2 * Math.min(window.devicePixelRatio || 1, 2), linea.height);
+  }
+  if (ahora - ultimoPanel < 150) return; // el texto se refresca unas 7 veces por segundo
+  ultimoPanel = ahora;
+  $("subtitulo").textContent = textoActual(t);
+  const segs = sesion.doc.segmentos, s = segs[sesion.segIdx], c = sesion.color, f = sesion.registro.fps.at(-1);
+  const mm = (x) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, "0")}`;
+  if (sesion.perfil.estatico) {
+    $("muestra").style.background = hsl(0, 0, 0.25);
+    $("estado").textContent = `${mm(t)} · condición control: pantalla fija, no reacciona a la historia` + (f ? ` · ${f.fps} fps` : "");
+    return;
+  }
+  $("muestra").style.background = c ? hsl(c.H, c.S, c.L) : "transparent";
+  $("estado").textContent =
+    `${mm(t)} · segmento ${sesion.segIdx + 1}/${segs.length}` +
+    (s ? ` · valencia ${s.valencia.toFixed(2)} · activación ${s.activacion.toFixed(2)}` : "") +
+    (c ? ` → H ${c.H.toFixed(0)}° S ${c.S.toFixed(2)} L ${c.L.toFixed(2)}` : "") +
+    (sesion.mov ? ` · movimiento ${sesion.mov.vel.toFixed(3)}` : "") +
+    ` · voz ${sesion.r.toFixed(2)}` + (f ? ` · ${f.fps} fps` : "");
+}
+
+linea.addEventListener("click", (e) => {
+  if (sesion.modo !== "desarrollo") return;
+  const rect = linea.getBoundingClientRect();
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * duracionTotal();
+});
+addEventListener("keydown", (e) => {
+  if (sesion.modo === "desarrollo" && sesion.doc && e.key.toLowerCase() === "e" && !e.ctrlKey) {
+    $("panel").classList.toggle("visible");
+    if ($("panel").classList.contains("visible")) prepararLinea();
+  }
+});
 
 function evento(tipo, extra = {}) {
   sesion.registro.eventos.push({ tipo, t_audio: +audio.currentTime.toFixed(3), t_reloj: new Date().toISOString(), ...extra });
@@ -268,7 +500,7 @@ function registroCompleto() {
   const desf = sesion.registro.cambios.filter((c) => c.reproduciendo).map((c) => Math.abs(c.desfase_s));
   const media = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : null);
   return {
-    participante: sesion.participante, condicion: sesion.condicion, modo: sesion.modo,
+    participante: sesion.participante, condicion: sesion.condicion, modo: sesion.modo, renderizador: render.tipo,
     titulo: sesion.doc?.titulo ?? "", matiz_base: sesion.H0, perfil: Ambientacion.PERFILES[sesion.condicion],
     agente: navigator.userAgent, pantalla: { ancho: screen.width, alto: screen.height, dpr: devicePixelRatio },
     resumen: {
@@ -342,17 +574,19 @@ $("formulario").addEventListener("submit", async (e) => {
     analizador.connect(ac.destination);
     await ac.resume();
 
+    $("config").style.display = "none";
     if (sesion.modo === "experimento") {
       bloquearControles();
       document.body.style.cursor = "none";
       if (params.get("pantallaCompleta") !== "0") await document.documentElement.requestFullscreen?.().catch(() => {});
     } else {
       audio.controls = true;
-      $("dev").style.display = "flex";
+      $("panel").classList.add("visible");
+      audio.addEventListener("loadedmetadata", prepararLinea);
+      prepararLinea();
     }
 
-    $("config").style.display = "none";
-    evento("inicio", { condicion: sesion.condicion });
+    evento("inicio", { condicion: sesion.condicion, renderizador: render.tipo });
     requestAnimationFrame(cuadro);
     await audio.play();
   } catch (err) {

@@ -16,7 +16,8 @@ D_MIN_POR_DEFECTO = 20.0
 def segmentar(frases: Iterable[dict], d_min: float = D_MIN_POR_DEFECTO) -> list[dict]:
     """Recibe frases {inicio, fin, texto} ordenadas y devuelve segmentos.
 
-    Cada segmento: {id, inicio, fin, texto}. El último segmento puede durar
+    Cada segmento: {id, inicio, fin, texto, frases}; `frases` conserva las frases
+    con sus tiempos (el reproductor las usa como subtítulo en modo desarrollo). El último segmento puede durar
     menos que d_min si la narración termina antes del umbral; en ese caso se
     une al segmento anterior para no producir un cambio de color tardío y breve.
     """
@@ -43,12 +44,13 @@ def segmentar(frases: Iterable[dict], d_min: float = D_MIN_POR_DEFECTO) -> list[
                 "inicio": previo["inicio"],
                 "fin": resto["fin"],
                 "texto": previo["texto"] + " " + resto["texto"],
+                "frases": previo["frases"] + resto["frases"],
             }
         segmentos.append(resto)
 
     for i, s in enumerate(segmentos):
         s["id"] = i
-    return [{"id": s["id"], "inicio": s["inicio"], "fin": s["fin"], "texto": s["texto"]} for s in segmentos]
+    return [{"id": s["id"], "inicio": s["inicio"], "fin": s["fin"], "texto": s["texto"], "frases": s["frases"]} for s in segmentos]
 
 
 def _cerrar(frases: list[dict]) -> dict:
@@ -56,4 +58,5 @@ def _cerrar(frases: list[dict]) -> dict:
         "inicio": round(frases[0]["inicio"], 3),
         "fin": round(frases[-1]["fin"], 3),
         "texto": " ".join(f["texto"] for f in frases),
+        "frases": [{"inicio": round(f["inicio"], 3), "fin": round(f["fin"], 3), "texto": f["texto"]} for f in frases],
     }
