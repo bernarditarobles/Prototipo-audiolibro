@@ -114,8 +114,8 @@ A partir de los antecedentes y del marco teórico se definen cinco requisitos pa
  
 \begin{itemize}
 \item \textbf{R1 -- Sin interacción.} El estímulo no exige respuestas ni seguimiento activo, a diferencia de las tareas visuales que reducen la comprensión \cite{xie2023}.
-\item \textbf{R2 -- Cambios lentos y sutiles.} Las transiciones de color y el movimiento del estímulo son lentos, para que se procesen en el trasfondo de la atención \cite{wisneski1998}.
-\item \textbf{R3 -- No figurativo.} El estímulo se limita a color, luz difusa y una textura abstracta en movimiento, sin objetos ni escenas que reemplacen la imaginería del oyente \cite{greenbrock2002}.
+\item \textbf{R2 -- Cambios lentos y sutiles.} Las transiciones se procesan en el trasfondo de la atención \cite{wisneski1998}.
+\item \textbf{R3 -- No figurativo.} El estímulo se limita a color, luz difusa y una textura abstracta en movimiento lento, sin objetos ni escenas que reemplacen la imaginería del oyente \cite{greenbrock2002}.
 \item \textbf{R4 -- Coherente con la narración.} Los cambios responden al contenido de la historia, para no constituir material ajeno según el principio de coherencia \cite{mayermoreno2003}.
 \item \textbf{R5 -- Saturación y brillo moderados.} Valores moderados limitan el aumento de la activación \cite{wilmsoberfeld2018}.
 \end{itemize}
@@ -133,7 +133,7 @@ La etapa de preprocesamiento consta de tres módulos encadenados.
  
 \textbf{Anotación afectiva.} Un modelo de lenguaje recibe el texto de cada segmento junto con el del segmento anterior, para que la valoración considere el contexto de la escena. Para cada segmento $i$ devuelve una valencia $v_i \in [-1, 1]$, que indica cuán agradable o desagradable es el contenido, y una activación $a_i \in [0, 1]$, que indica su intensidad, siguiendo las dos dimensiones del modelo circumplejo del afecto \cite{russell1980}. La instrucción define ambas dimensiones y exige una respuesta en formato JSON, lo que permite procesarla de forma automática. La anotación se realiza sobre el texto y no sobre el audio, porque el estímulo debe reflejar el contenido de la historia para no constituir material ajeno (R4).
  
-El resultado del preprocesamiento es un archivo JSON con un registro por segmento, que contiene sus tiempos de inicio y fin, su texto, las frases que lo componen con sus tiempos y sus valores afectivos.
+El resultado del preprocesamiento es un archivo JSON con un registro por segmento, que contiene sus tiempos de inicio y fin, su texto y sus valores afectivos.
  
 \subsubsection{Reproducción}
 El reproductor es una página web que reproduce el audio y muestra la ambientación a pantalla completa. En cada cuadro de animación, aproximadamente 60 veces por segundo, ejecuta cuatro pasos:
@@ -141,13 +141,13 @@ El reproductor es una página web que reproduce el audio y muestra la ambientaci
 \begin{enumerate}
 \item \textbf{Lectura del audio.} Obtiene la posición de reproducción $t$ y la energía de la señal en ese instante, normalizada como $r(t) \in [0, 1]$.
 \item \textbf{Búsqueda del segmento activo.} Identifica en el archivo JSON el segmento $i$ cuyo intervalo contiene a $t$.
-\item \textbf{Cálculo del color y del movimiento.} Obtiene los valores objetivo de matiz, saturación y luminosidad a partir de $a_i$ y $v_i$, los aproxima de forma gradual y suma una leve modulación según la intensidad de la voz, siguiendo el enfoque de Graf et al. \cite{graf2021}. A partir de la activación, también calcula la velocidad y la turbulencia de la textura.
-\item \textbf{Renderizado.} Dibuja a pantalla completa un campo de niebla abstracta en movimiento, cuyo color medio es el calculado en el paso anterior, sin formas ni figuras (R3).
+\item \textbf{Cálculo del color.} Obtiene los valores objetivo de matiz, saturación y luminosidad a partir de $a_i$ y $v_i$, los aproxima de forma gradual y suma una leve modulación según la intensidad de la voz, siguiendo el enfoque de Graf et al. \cite{graf2021}. A partir de la activación, también calcula la velocidad y la turbulencia de la textura.
+\item \textbf{Renderizado.} Dibuja un campo de niebla abstracta en movimiento que ocupa toda la pantalla, con el color calculado en el paso anterior como valor medio, sin formas ni figuras (R3).
 \end{enumerate}
  
 El reproductor no ofrece más controles que los de reproducción, por lo que el oyente no necesita interactuar con el estímulo (R1). Los parámetros del mapeo se agrupan en perfiles, que se seleccionan al iniciar la sesión.
  
-\subsection{Mapeo de la narración al estímulo}
+\subsection{Mapeo de la narración al color}
 El color se representa en el espacio HSL (matiz $H$, saturación $S$ y luminosidad $L$). Para cada segmento $i$ se calculan los valores objetivo:
 \begin{align}
 S_i^{*} &= S_{\min} + a_i\,(S_{\max} - S_{\min}) \label{eq:s}\\
@@ -168,14 +168,14 @@ L(t) = L_{s}(t) + k\, r(t)
 \end{equation}
 donde $L_{s}(t)$ es la luminosidad suavizada, $r(t) \in [0, 1]$ es la energía RMS normalizada de la señal de audio y $k$ es la ganancia de modulación.
 
-El color $(H, S, L)$ obtenido es el valor medio del estímulo. Sobre él se dibuja una textura de ruido fractal, que varía la luminosidad en una proporción $c$ (contraste) y el matiz en hasta $\pm\delta_H$ grados alrededor de ese valor, y que se desplaza de forma continua. La activación también controla el movimiento: a partir de la activación suavizada $a_s(t)$, obtenida con la misma ecuación~\eqref{eq:suavizado}, se calculan la velocidad de deriva $u$ y la turbulencia $w$ de la textura:
+El color obtenido es el valor medio de una textura de ruido fractal, que varía la luminosidad en una proporción $c$ y el matiz en hasta $\pm\delta_H$ grados alrededor de ese valor, y que se desplaza de forma continua. La activación también controla este movimiento: a partir de la activación suavizada $a_s(t)$, obtenida con la ecuación~\eqref{eq:suavizado}, se calculan la velocidad de deriva $u$ y la turbulencia $w$ de la textura:
 \begin{align}
 u(t) &= u_{\min} + a_s(t)\,(u_{\max} - u_{\min}) \label{eq:vel}\\
 w(t) &= w_{\min} + a_s(t)\,(w_{\max} - w_{\min}) \label{eq:turb}
 \end{align}
-La velocidad se integra en una fase, $\varphi(t + \Delta t) = \varphi(t) + u(t)\,\Delta t$, que desplaza la textura. Así, un cambio de activación modifica el ritmo del movimiento sin producir saltos en la imagen. Las escenas calmas se ven casi quietas, y las intensas, más rápidas y turbulentas.
+La velocidad se acumula en una fase que desplaza la textura, de modo que un cambio de activación modifica el ritmo del movimiento sin producir saltos en la imagen.
  
-Todos los parámetros se agrupan en perfiles configurables. El perfil \textit{mínimo} cumple los cinco requisitos; el perfil \textit{llamativo} no cumple R2 ni R5, ya que usa cambios y movimientos rápidos y colores intensos, y se usa como condición de contraste en la evaluación (Tabla~\ref{tab:perfiles}). La velocidad $u$ se expresa en unidades de textura por segundo: con $u = 0{,}02$, una forma de la niebla tarda alrededor de 50~s en recorrer su propio tamaño.
+Todos los parámetros se agrupan en perfiles configurables. El perfil \textit{mínimo} cumple los cinco requisitos; el perfil \textit{llamativo} no cumple R2 ni R5, ya que usa cambios rápidos y colores intensos, y se usa como condición de contraste en la evaluación (Tabla~\ref{tab:perfiles}).
  
 \begin{table}[t]
 \centering
@@ -200,23 +200,12 @@ $\delta_H$ & $8^\circ$ & $35^\circ$ \\
  
 % =====================================================================
 \section{Implementación de la prueba de concepto}
-
-\subsection{Preprocesamiento}
-El preprocesamiento se implementa en Python. La transcripción usa el modelo \textit{small} de Whisper \cite{radford2023}, que devuelve el texto de cada frase con sus marcas temporales. La segmentación agrupa las frases según la regla de $d_{\min} = 20$~s descrita en la Sección~IV.
-
-El módulo de anotación afectiva envía cada segmento, junto con el anterior, a la API de un modelo de lenguaje con una instrucción que define la valencia y la activación y exige una respuesta en JSON. Antes de escribir cada respuesta en el archivo de salida, verifica que tenga el formato y los rangos esperados; si no los cumple, el segmento se vuelve a anotar. En la prueba de concepto no se contó con acceso a la API, por lo que la anotación de la obra la realizó el modelo Claude (Anthropic) en una sesión interactiva, siguiendo la misma instrucción y el mismo esquema: cada segmento se valoró leyendo también el anterior, y los valores pasaron por la misma validación de formato y rangos. Por eso, esta anotación no puede reproducirse ejecutando el módulo, aunque los valores y la instrucción quedan registrados.
-
-\subsection{Reproductor}
-El reproductor se implementa en JavaScript como una página web autocontenida, sin dependencias externas. El audio se reproduce con el elemento \texttt{audio} de HTML5, y la Web Audio API, mediante un \texttt{AnalyserNode}, entrega la señal para calcular $r(t)$. Para que $r(t)$ no dependa del volumen de la grabación, la energía RMS se divide por un máximo que decae lentamente, con una constante de 30~s. El ciclo de animación se sincroniza con la frecuencia de actualización de la pantalla mediante \texttt{requestAnimationFrame}. Como los segmentos están ordenados en el tiempo, el segmento activo se localiza mediante búsqueda binaria, y en los huecos entre segmentos se mantiene el último segmento iniciado.
-
-La niebla se dibuja con WebGL sobre un elemento \texttt{canvas}, mediante un programa de sombreado que combina varias capas de ruido fractal deformadas entre sí, a una resolución reducida, ya que la imagen es difusa. Si el navegador no dispone de WebGL, el reproductor dibuja en su lugar un gradiente radial difuso con el mismo color. En la condición de control, la pantalla muestra un gris neutro y estático ($L = 0{,}25$).
-
-El reproductor tiene dos modos. En el modo \textit{experimento}, la ambientación ocupa toda la pantalla, sin cursor ni controles; los intentos de pausar o de saltar en el audio se bloquean y quedan registrados. Al terminar, la sesión genera un registro con cada cambio de segmento, su desfase y la tasa de cuadros de cada segundo. En el modo \textit{desarrollo}, se agrega un panel que muestra la frase que se está narrando, una línea de tiempo de la obra con la valencia, la activación y el color objetivo de cada segmento, y los valores actuales del estímulo. Este panel sirve para inspeccionar y demostrar el sistema, y no se muestra a los participantes.
-
-\subsection{Obra}
-La prueba de concepto se aplica a \textit{La mujer alta}, cuento de Pedro Antonio de Alarcón escrito originalmente en español, en una grabación de dominio público de LibriVox con un único narrador, de 36~min 16~s de duración. Se eligió por ser una historia completa de una duración apta para una sesión experimental y con un arco emocional variado: comienza con una conversación distendida entre amigos y avanza hacia escenas de duelo y de terror, con regresos a la conversación inicial.
-
-Whisper transcribió el audio en unos seis minutos, en un equipo de cuatro núcleos sin GPU, y produjo 612 frases. La segmentación las agrupó en 100 segmentos, de entre 20 y 27~s (21,7~s en promedio). La Fig.~\ref{fig:anotacion} muestra la anotación resultante. La valencia media es $-0{,}48$ (87 de los 100 segmentos son negativos), y la activación media es $0{,}53$, con picos en los encuentros con la mujer alta y valores bajos en la conversación inicial y en los regresos al marco del relato.
+ 
+El preprocesamiento se implementa en Python. La transcripción usa el modelo \textit{small} de Whisper \cite{radford2023} con marcas temporales por frase. La anotación afectiva se realiza mediante la API de un modelo de lenguaje, y las respuestas se validan antes de escribirse en el archivo de salida: si una respuesta no cumple el formato o los rangos esperados, el segmento se vuelve a anotar. En esta prueba de concepto no se contó con acceso a la API, por lo que la anotación de la obra la realizó el modelo Claude (Anthropic) en una sesión interactiva, con la misma instrucción y la misma validación de formato y rangos. Por eso, esta anotación no puede reproducirse ejecutando el módulo, aunque los valores y la instrucción quedan registrados.
+ 
+El reproductor se implementa en JavaScript como una página web autocontenida, sin dependencias externas. El audio se reproduce con el elemento \texttt{audio} de HTML5, y la Web Audio API, mediante un \texttt{AnalyserNode}, entrega la energía de la señal para calcular $r(t)$. El ciclo de animación se sincroniza con la frecuencia de actualización de la pantalla mediante \texttt{requestAnimationFrame}, y la niebla se dibuja con WebGL sobre un elemento \texttt{canvas}. Como los segmentos están ordenados en el tiempo, el segmento activo se localiza mediante búsqueda binaria. En el modo de experimento, el reproductor impide pausar o saltar en el audio y genera un registro con cada cambio de segmento y la tasa de cuadros de cada segundo, que se usa en la verificación técnica. En un modo de desarrollo, que no se muestra a los participantes, agrega un panel con la frase narrada y una línea de tiempo de la anotación, para inspeccionar y demostrar el sistema.
+ 
+La prueba de concepto se aplica a una obra de ficción en español en dominio público, narrada por voluntarios de LibriVox: \textit{La mujer alta}, cuento de Pedro Antonio de Alarcón, en una grabación de 36~min 16~s con un único narrador. Whisper la transcribió en unos seis minutos, en un equipo de cuatro núcleos sin GPU, y produjo 612 frases, agrupadas en 100 segmentos de entre 20 y 27~s. La Fig.~\ref{fig:anotacion} muestra la anotación resultante: la valencia media es $-0{,}48$ y la activación media, $0{,}53$, con picos en los encuentros con la mujer alta. La Fig.~\ref{fig:estimulo} muestra el estímulo de ambos perfiles, con un matiz base $H_0 = 210^\circ$.
 
 \begin{figure}[t]
 \centering
@@ -225,19 +214,16 @@ Whisper transcribió el audio en unos seis minutos, en un equipo de cuatro núcl
 \label{fig:anotacion}
 \end{figure}
 
-La Fig.~\ref{fig:estimulo} muestra el estímulo de ambos perfiles en un momento de calma y en uno de terror. En el perfil mínimo, el cambio es apenas perceptible, como exige R2. En la prueba se usa un matiz base $H_0 = 210^\circ$ (azul).
-
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{estimulo}
 \caption{Estímulo en un segmento de calma ($v = 0{,}45$, $a = 0{,}15$) y en uno de terror ($v = -0{,}85$, $a = 0{,}85$), con los perfiles mínimo y llamativo.}
 \label{fig:estimulo}
 \end{figure}
+ 
+La verificación técnica del sistema evalúa tres aspectos. Primero, la sincronización: se mide el desfase entre el inicio de cada segmento y el momento en que el reproductor cambia de color. Segundo, la fluidez: se registra la tasa de cuadros por segundo del reproductor durante una sesión completa, para comprobar que la animación no se degrada con el tiempo. Tercero, la validez de la anotación: se comparan la valencia y la activación asignadas por el modelo con las asignadas por anotadores humanos en una muestra de segmentos.
 
-\subsection{Verificación técnica}
-La verificación técnica evalúa tres aspectos. Primero, la sincronización: se mide el desfase entre el inicio de cada segmento y el cuadro en que el reproductor cambia de color objetivo. Segundo, la fluidez: se registra la tasa de cuadros por segundo durante una sesión completa, para comprobar que la animación no se degrada con el tiempo. Tercero, la validez de la anotación: se comparan la valencia y la activación asignadas por el modelo con las asignadas por anotadores humanos en una muestra de segmentos.
-
-Para los dos primeros aspectos, se reprodujo la obra completa con el perfil mínimo en modo experimento, en el navegador Chromium sin interfaz gráfica y con renderizado por software, en el mismo equipo de cuatro núcleos. Los resultados se muestran en la Fig.~\ref{fig:verificacion}. En los 100 cambios de segmento, el desfase medio fue de 9,8~ms, con una mediana de 9,8~ms y un máximo de 20,2~ms; es decir, el color objetivo cambió como máximo un cuadro después del inicio de cada segmento, más el retardo con que se actualiza la posición del audio. Este desfase es despreciable frente a la constante de tiempo de la transición del perfil mínimo ($\tau = 6$~s). En cuanto a la fluidez, durante los 2157 segundos registrados la tasa media fue de 59,99 cuadros por segundo, con un mínimo de 58,0, y no se observó degradación con el tiempo: la media fue de 59,99 en el primer 10\,\% de la sesión y de 60,0 en el último. El intento de pausa realizado durante la prueba fue bloqueado y registrado, y el audio continuó hasta el final.
+Para los dos primeros aspectos, se reprodujo la obra completa con el perfil mínimo en modo experimento, en el navegador Chromium sin interfaz gráfica y con renderizado por software, en el mismo equipo (Fig.~\ref{fig:verificacion}). En los 100 cambios de segmento, el desfase medio fue de 9,8~ms y el máximo, de 20,2~ms, despreciable frente a la constante de tiempo del perfil mínimo ($\tau = 6$~s). Este desfase se mide con la posición que informa el elemento \texttt{audio}, por lo que no incluye la latencia del sonido ni de la pantalla. Durante los 2157 segundos registrados, la tasa media fue de 59,99 cuadros por segundo, con un mínimo de 58,0, sin degradación con el tiempo: 59,99 en el primer 10\,\% de la sesión y 60,0 en el último. La validez de la anotación no se evaluó, porque no se contó con anotadores humanos en el plazo disponible.
 
 \begin{figure}[t]
 \centering
@@ -245,19 +231,15 @@ Para los dos primeros aspectos, se reprodujo la obra completa con el perfil mín
 \caption{Verificación técnica durante la reproducción completa con el perfil mínimo: desfase de cada cambio de segmento y cuadros por segundo.}
 \label{fig:verificacion}
 \end{figure}
-
-El desfase se mide con la posición que informa el elemento \texttt{audio} en el cuadro del cambio, por lo que no incluye la latencia de salida del sonido ni la de la pantalla. Además, como la medición se hizo sin una pantalla física y con renderizado por software, debe repetirse en el equipo del experimento.
-
-La validez de la anotación no se evaluó en este trabajo, porque no se contó con anotadores humanos en el plazo disponible. El sistema incluye las herramientas para hacerlo: una planilla con una muestra aleatoria de segmentos, sin los valores del modelo, y un análisis que calcula las correlaciones de Pearson y de Spearman y el error absoluto medio entre el modelo y el promedio humano, junto con el acuerdo entre los anotadores como referencia.
-
+ 
 % =====================================================================
 \section{Diseño experimental propuesto}
  
 \subsection{Participantes y condiciones}
-Se propone un diseño entre sujetos con tres condiciones: el grupo de control escucha el audiolibro con la pantalla fija, sin cambios; el segundo grupo lo escucha con una ambientación suave (perfil mínimo), y el tercero, con una ambientación exagerada (perfil llamativo). Cada participante pasa por una sola condición, lo que evita que una afecte a las siguientes y permite usar el mismo texto en los tres grupos. Los participantes son adultos con español como lengua materna, visión normal o corregida y sin conocimiento previo de \textit{La mujer alta}.
+Se propone un diseño entre sujetos con tres condiciones: el grupo de control escucha el audiolibro con la pantalla fija, sin cambios; el segundo grupo lo escucha con una ambientación suave (perfil mínimo), y el tercero, con una ambientación exagerada (perfil llamativo). Cada participante pasa por una sola condición, lo que evita que una afecte a las siguientes y permite usar el mismo texto en los tres grupos. Los participantes son adultos con español como lengua materna, visión normal o corregida y sin conocimiento previo de la obra.
  
 \subsection{Procedimiento}
-Cada participante escucha la obra completa (36 minutos) frente a una pantalla, en un ambiente de iluminación controlada. Se usa una historia completa para que ningún participante escuche un relato sin final, lo que podría afectar la inmersión. En la condición de control, la pantalla muestra un fondo neutro y estático. No se permite pausar ni retroceder el audio; el reproductor lo impide en el modo experimento y registra los intentos. Antes de comenzar, el participante completa el cuestionario de fatiga visual. Al finalizar, completa las medidas de comprensión e inmersión y repite el cuestionario de fatiga visual.
+Cada participante escucha la misma obra completa, de 36 minutos, frente a una pantalla, en un ambiente de iluminación controlada. En la condición de control, la pantalla muestra un fondo neutro y estático. No se permite pausar ni retroceder el audio. Antes de comenzar, el participante completa el cuestionario de fatiga visual. Al finalizar, completa las medidas de comprensión e inmersión y repite el cuestionario de fatiga visual.
  
 \subsection{Medidas}
 \begin{itemize}
@@ -275,7 +257,7 @@ Para cada medida, las diferencias entre los tres grupos se analizan con un ANOVA
 \subsection{Comprensión}
 Se espera que el grupo con ambientación mínima comprenda la historia tan bien como el grupo que escucha sin estímulo visual, y que el grupo con ambientación llamativa la comprenda peor que ambos.
  
-Esta expectativa se basa en que una tarea visual sencilla no afecta de forma significativa la comprensión de un audiolibro, mientras que una tarea exigente sí la reduce \cite{xie2023}. La ambientación mínima exige aún menos que una tarea sencilla, porque el oyente no tiene que hacer nada con ella. La ambientación llamativa, en cambio, al cambiar y moverse con mayor rapidez y utilizar colores más intensos, tiende a captar la atención y empeorar la comprensión de la historia \cite{mayermoreno2003}.
+Esta expectativa se basa en que una tarea visual sencilla no afecta de forma significativa la comprensión de un audiolibro, mientras que una tarea exigente sí la reduce \cite{xie2023}. La ambientación mínima exige aún menos que una tarea sencilla, porque el oyente no tiene que hacer nada con ella. La ambientación llamativa, en cambio, al cambiar con mayor rapidez y utilizar colores más intensos, tiende a captar la atención y empeorar la comprensión de la historia \cite{mayermoreno2003}.
  
 Si el grupo con ambientación mínima comprende peor que el de control, significa que el oyente percibe la ambientación como algo ajeno a la historia, aunque esté vinculada a ella, y el sistema necesitaría cambios todavía más suaves.
  
@@ -300,18 +282,16 @@ El mejor resultado para el sistema es que la ambientación mínima no empeore la
 \subsection{Limitaciones}
 La principal limitación es que el experimento no se lleva a cabo en este trabajo. Las expectativas sobre comprensión, inmersión y fatiga visual se derivan de estudios previos y no de datos propios, por lo que deben entenderse como hipótesis a comprobar.
  
-En cuanto al sistema, la ambientación depende de que el modelo de lenguaje interprete correctamente el tono de cada escena. Hasta donde se pudo relevar, estos modelos no están evaluados específicamente con textos literarios en español, donde el tono puede expresarse de forma indirecta, por ejemplo mediante la ironía o una tensión que se construye de a poco. Si el modelo se equivoca, el color reflejaría un tono que no corresponde a la historia. En este trabajo, además, la anotación de la obra se hizo en una sesión interactiva y no mediante la API, y no se comparó con la de anotadores humanos, por lo que su validez no está verificada.
-
-La verificación técnica se realizó en un navegador sin interfaz gráfica, con renderizado por software, y no en el equipo y la pantalla en que se haría el experimento. Por otra parte, el estímulo incorpora movimiento además de color. Aunque en el perfil mínimo es muy lento, el movimiento podría captar la atención con más facilidad que un cambio de color y aumentar así la demanda de atención respecto de un estímulo solo cromático; los estudios relevados no permiten anticipar este efecto. Por último, el matiz base $H_0$ y el sentido en que la valencia desplaza el matiz se fijaron sin un criterio teórico, ya que la relación entre matiz y valencia es débil \cite{wilmsoberfeld2018}.
+En cuanto al sistema, la ambientación depende de que el modelo de lenguaje interprete correctamente el tono de cada escena. Hasta donde se pudo relevar, estos modelos no están evaluados específicamente con textos literarios en español, donde el tono puede expresarse de forma indirecta, por ejemplo mediante la ironía o una tensión que se construye de a poco. Si el modelo se equivoca, el color reflejaría un tono que no corresponde a la historia. Además, en este trabajo la anotación no se comparó con la de anotadores humanos, y la verificación técnica se realizó sin una pantalla física y con renderizado por software, por lo que ambas deben repetirse.
  
 Las decisiones de diseño se apoyan en estudios realizados en condiciones distintas a las de un audiolibro. La relación entre color y emoción se estudia con colores fijos, mostrados durante pocos segundos en una cabina oscura \cite{wilmsoberfeld2018}, y no con colores que cambian mientras se escucha una historia. Del mismo modo, la escala usada para medir la inmersión se desarrolla con relatos escritos \cite{greenbrock2000, appel2015}, por lo que su aplicación a la escucha requiere verificación.
  
-El diseño experimental también tiene un alcance acotado. Se utiliza una sola obra, de un único género y con un único narrador, por lo que los resultados podrían variar con otros textos o voces. La sesión de 36 minutos más que duplica la exposición más larga de los estudios previos, que van de 30 segundos a 16 minutos \cite{wilmsoberfeld2018, rogowsky2016}, pero sigue siendo más corta que la escucha de un libro completo, y podría no bastar para que aparezcan diferencias de fatiga visual. Además, el experimento se realiza en un ambiente controlado, mientras que los audiolibros suelen escucharse en situaciones cotidianas, como al viajar o al realizar otras actividades.
+El diseño experimental también tiene un alcance acotado. Se utiliza una sola obra, de un único género y con un único narrador, por lo que los resultados podrían variar con otros textos o voces. La sesión de 36 minutos es más larga que las exposiciones de los estudios previos, que van de 30 segundos a 16 minutos \cite{wilmsoberfeld2018, rogowsky2016}, pero sigue siendo más corta que la escucha de un libro completo. Además, el experimento se realiza en un ambiente controlado, mientras que los audiolibros suelen escucharse en situaciones cotidianas, como al viajar o al realizar otras actividades.
  
 \subsection{Trabajo futuro}
-El primer paso es validar la anotación del modelo comparándola con la de lectores humanos, usando las herramientas ya implementadas, y repetir la verificación técnica en el equipo del experimento. Luego, se propone llevar a cabo el experimento propuesto, para contrastar las expectativas con datos reales.
+El primer paso es llevar a cabo el experimento propuesto, para contrastar las expectativas con datos reales. De forma previa, se propone validar la anotación del modelo comparándola con la de lectores humanos en una muestra amplia de fragmentos.
  
-Una segunda línea consiste en variar los parámetros del perfil mínimo, como la velocidad de las transiciones y del movimiento o la intensidad del color, para identificar qué valores acompañan mejor la escucha; esto incluye comparar el estímulo en movimiento con uno solo cromático. También se propone repetir el estudio con obras de distintos géneros y con sesiones más largas, más cercanas a la duración de un libro completo.
+Una segunda línea consiste en variar los parámetros del perfil mínimo, como la velocidad de las transiciones o la intensidad del color, para identificar qué valores acompañan mejor la escucha. También se propone repetir el estudio con obras de distintos géneros y con sesiones más largas, más cercanas a la duración de un libro completo.
  
 Por otra parte, la fatiga visual y la atención podrían medirse de forma más objetiva mediante el seguimiento de la mirada o el registro de la actividad cerebral \cite{mayer2024}, que permiten observar cuánto atiende el oyente al estímulo sin depender de cuestionarios.
  
