@@ -102,7 +102,7 @@ s.addText("Cinco requisitos para no competir con la historia", { placeholder: "t
 const req = [
   ["R1", "Sin interacción", "No exige respuestas ni seguimiento"],
   ["R2", "Lento y sutil", "Cambios en el trasfondo de la atención"],
-  ["R3", "No figurativo", "Color y textura abstracta, sin escenas"],
+  ["R3", "No figurativo", "Solo color y luz difusa, sin escenas"],
   ["R4", "Coherente", "Reacciona al contenido de la historia"],
   ["R5", "Moderado", "Saturación y brillo acotados"],
 ];
@@ -141,8 +141,8 @@ s.addShape(pres.shapes.RIGHT_ARROW, { x: M + 5.75, y: 3.55, w: 0.75, h: 0.5, fil
 etapa(M + 6.65, 1.6, 5.45, "Reproducción (navegador, 60 veces/s)", [
   ["Lectura del audio", "Posición t y energía de la voz r(t)"],
   ["Segmento activo", "Búsqueda binaria en el JSON"],
-  ["Color y movimiento", "Ecuaciones 1–5 + velocidad y turbulencia"],
-  ["Renderizado", "Niebla abstracta a pantalla completa"],
+  ["Cálculo del color", "Ecuaciones 1–5, con transición gradual"],
+  ["Renderizado", "Resplandor de color a pantalla completa"],
 ], C.accent2);
 s.addNotes("Se separa en dos etapas porque tienen tiempos muy distintos: transcribir y anotar lleva minutos, y la imagen se actualiza 60 veces por segundo. Un mismo JSON sirve para las tres condiciones del experimento.");
 
@@ -150,8 +150,8 @@ s.addNotes("Se separa en dos etapas porque tienen tiempos muy distintos: transcr
 s = pres.addSlide({ masterName: "CONTENIDO", sectionTitle: "Diseño" });
 s.addText("De la emoción del texto al estímulo", { placeholder: "title" });
 const filas = [
-  ["Activación a", "→", "saturación, luminosidad, velocidad y turbulencia"],
-  ["Valencia v", "→", "desplaza el matiz (±ΔH alrededor de H₀)"],
+  ["Activación a", "→", "saturación y luminosidad: más intenso, más vivo"],
+  ["Valencia v", "→", "matiz: cálido si es agradable, frío si no"],
   ["Voz r(t)", "→", "leve modulación del brillo"],
   ["Suavizado τ", "→", "transición gradual hacia cada nuevo valor"],
 ];
@@ -166,16 +166,15 @@ const tabla = [
   [{ text: "Parámetro", options: { bold: true, color: C.background1, fill: { color: C.text2 } } },
    { text: "Mínimo", options: { bold: true, color: C.background1, fill: { color: C.text2 } } },
    { text: "Llamativo", options: { bold: true, color: C.background1, fill: { color: C.text2 } } }],
-  ["Saturación", "0,20 – 0,45", "0,70 – 1,00"],
-  ["Luminosidad", "0,15 – 0,35", "0,40 – 0,65"],
-  ["ΔH (matiz)", "20°", "60°"],
+  ["Saturación", "0,35 – 0,60", "0,70 – 1,00"],
+  ["Luminosidad", "0,35 – 0,55", "0,45 – 0,65"],
+  ["ΔH (matiz)", "100°", "130°"],
   ["τ (transición)", "6 s", "0,5 s"],
-  ["Velocidad", "0,012 – 0,05", "0,10 – 0,60"],
-  ["Turbulencia", "0,25 – 0,65", "0,60 – 1,40"],
+  ["k (voz)", "0,02", "0,15"],
 ];
 s.addTable(tabla, { x: 7.5, y: 1.7, w: 5.2, colW: [1.9, 1.65, 1.65], fontSize: 14, color: C.text1, border: { type: "solid", pt: 0.75, color: HEX.lt2 }, rowH: 0.48, fill: { color: C.background1 }, objectName: "Tabla de perfiles" });
-caja(s, "La activación mueve casi todo porque es la dimensión con más efecto del color sobre la emoción; la valencia solo desplaza el matiz, porque su relación con el color es débil (Wilms y Oberfeld, 2018).", { x: M, y: 5.75, w: 6.3, h: 1.2, fontSize: 14, color: C.accent3, italic: true });
-s.addNotes("Los valores objetivo se calculan con las ecuaciones 1 a 3 del paper y se aproximan con el suavizado exponencial de la ecuación 4. El brillo suma la energía de la voz (ecuación 5). Lo nuevo de la implementación es que la activación también controla la velocidad y la turbulencia de la niebla.");
+caja(s, "La activación controla saturación y luminosidad porque son las dimensiones del color con más efecto sobre la emoción (Wilms y Oberfeld, 2018). Matiz base H₀ = 355°.", { x: M, y: 5.75, w: 6.3, h: 1.2, fontSize: 14, color: C.accent3, italic: true });
+s.addNotes("Los valores objetivo se calculan con las ecuaciones 1 a 3 del paper y se aproximan con el suavizado exponencial de la ecuación 4. El brillo suma la energía de la voz (ecuación 5). Con el matiz base de 355°, lo agradable se ve dorado y lo desagradable violeta.");
 
 // ---------- 6. Obra y anotación ----------
 pres.addSection({ title: "Resultados" });
@@ -220,7 +219,7 @@ const anchoI = 4.6, altoI = anchoI * 9 / 16, x0 = 2.6, y0 = 1.75, gap = 0.3;
   caja(s, [{ text: t, options: { bold: true, fontSize: 18, breakLine: true } }, { text: d, options: { fontSize: 12, color: C.accent6 } }],
     { x: M, y: y0 + f * (altoI + gap) + altoI / 2 - 0.4, w: 1.8, h: 0.9, color: C.background1 });
 });
-s.addNotes("En el perfil mínimo el cambio entre calma y terror es apenas perceptible: es lo que pide R2. En el llamativo el color se satura, aclara y la niebla se mueve mucho más rápido. Cerca de 6 segundos tarda el mínimo en llegar a cada nuevo color.");
+s.addNotes("En la calma la luz es dorada y tenue; en el terror, violeta y más intensa. El perfil mínimo es suave y tarda unos 6 segundos en llegar a cada nuevo color; el llamativo cambia en medio segundo y usa colores saturados, a propósito, como contraste.");
 
 // ---------- 8. Verificación técnica ----------
 s = pres.addSlide({ masterName: "CONTENIDO", sectionTitle: "Resultados" });
@@ -276,7 +275,7 @@ pasosDemo.forEach((t, i) => {
   s.addText(String(i + 1), { isTextBox: true, x: M, y, w: 0.6, h: 0.6, align: "center", valign: "middle", fontSize: 16, bold: true, color: C.background1, margin: 0 });
   caja(s, t, { x: M + 0.85, y: y + 0.08, w: 4.4, h: 0.8, fontSize: 16, color: C.background1 });
 });
-caja(s, "El panel (frase narrada, línea de tiempo y color de cada segmento) solo aparece en modo desarrollo; los participantes ven únicamente la niebla.", { x: 6.0, y: 5.5, w: 6.73, h: 0.9, fontSize: 14, color: C.accent6, italic: true });
+caja(s, "El panel (frase narrada, línea de tiempo y color de cada segmento) solo aparece en modo desarrollo; los participantes ven únicamente la luz de color.", { x: 6.0, y: 5.5, w: 6.73, h: 0.9, fontSize: 14, color: C.accent6, italic: true });
 s.addNotes("Abrir reproductor/index.html en Chrome, cargar datos/mujer_alta/anotacion.json y el MP3, elegir perfil llamativo y modo desarrollo. Con un clic en la línea de tiempo se salta a cada momento. La tecla E oculta el panel.");
 
 // ---------- 10. Pendiente y próximos pasos ----------

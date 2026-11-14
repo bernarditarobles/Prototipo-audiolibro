@@ -3,20 +3,19 @@
 Prueba de concepto del sistema propuesto en *Escuchar y ver: diseño e implementación de un sistema de ambientación visual reactiva para audiolibros* (B. Robles). El sistema tiene dos etapas (sección IV-B):
 
 1. **Preprocesamiento** (`preprocesamiento/`, Python), una vez por audiolibro: transcripción con Whisper con tiempos por frase → segmentación en bloques de al menos `d_min = 20 s` que cierran en final de frase → anotación afectiva con un modelo de lenguaje (valencia `v ∈ [-1, 1]`, activación `a ∈ [0, 1]`, con el segmento anterior como contexto, salida JSON validada y reanotación si no cumple formato o rango). Produce un JSON con un registro por segmento.
-2. **Reproducción** (`reproductor/index.html`, JavaScript sin dependencias): reproduce el audio y dibuja a pantalla completa un campo de niebla abstracta en movimiento (WebGL; sin WebGL, un gradiente radial). En cada cuadro (`requestAnimationFrame`) lee la posición y la energía RMS (`AnalyserNode`), busca el segmento activo por búsqueda binaria, calcula el color objetivo con las ecuaciones (1)–(3), lo suaviza con (4) y suma la modulación por voz de (5). Ese color es el valor medio de la niebla; la activación suavizada fija además la velocidad de deriva y la turbulencia de la textura. No hay figuras ni escenas (R3).
+2. **Reproducción** (`reproductor/index.html`, JavaScript sin dependencias): reproduce el audio y dibuja a pantalla completa un resplandor radial difuso. En cada cuadro (`requestAnimationFrame`) lee la posición y la energía RMS (`AnalyserNode`), busca el segmento activo por búsqueda binaria, calcula el color objetivo con las ecuaciones (1)–(3), lo suaviza con (4) y suma la modulación por voz de (5). Con el matiz base de la obra (H0 = 355°), lo agradable se ve dorado y lo desagradable, violeta; la activación hace el color más saturado y luminoso. No hay figuras ni escenas (R3).
 
    En modo desarrollo se muestra un panel explicativo: la frase que se está narrando, una línea de tiempo de toda la obra con valencia, activación y el color objetivo de cada segmento, y los valores actuales. En modo experimento el panel no aparece.
 
-   ![Perfil llamativo durante la primera aparición de la mujer alta](docs/capturas/llamativo_terror.png)
-
-Perfiles definidos en `Ambientacion.PERFILES` dentro del reproductor: `minimo`, `llamativo` y `control` (fondo neutro y estático). Además de los parámetros del Cuadro I (S, L, ΔH, τ, k), cada perfil define el movimiento de la textura: `vel` (velocidad de deriva, interpolada con la activación), `turb` (turbulencia, interpolada con la activación), `contraste` y `varH` (variación local de matiz).
+Perfiles definidos en `Ambientacion.PERFILES` dentro del reproductor: `minimo`, `llamativo` y `control` (fondo gris estático).
 
 | Parámetro | Mínimo | Llamativo |
 |---|---|---|
-| vel (unidades/s) | 0,012 – 0,05 | 0,10 – 0,60 |
-| turb | 0,25 – 0,65 | 0,60 – 1,40 |
-| contraste | 0,30 | 0,60 |
-| varH | 8° | 35° |
+| S | 0,35 – 0,60 | 0,70 – 1,00 |
+| L | 0,35 – 0,55 | 0,45 – 0,65 |
+| ΔH | 100° | 130° |
+| τ | 6 s | 0,5 s |
+| k | 0,02 | 0,15 |
 
 ## Uso
 
