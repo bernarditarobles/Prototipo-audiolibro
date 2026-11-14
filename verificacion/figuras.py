@@ -5,6 +5,7 @@
 Genera:
   anotacion.pdf      valencia y activación por segmento a lo largo de la obra.
   verificacion.pdf   desfase de cada cambio de segmento y fps por segundo durante la sesión.
+  estimulo.pdf       (con --capturas DIR) cuadrícula de capturas {minimo,llamativo}_{calma,terror}.png.
 """
 
 from __future__ import annotations
@@ -93,16 +94,37 @@ def figura_verificacion(reg: dict, salida: Path) -> None:
     plt.close(fig)
 
 
+def figura_estimulo(capturas: Path, salida: Path) -> None:
+    fig, ejes = plt.subplots(2, 2, figsize=(3.5, 2.2), gridspec_kw={"wspace": 0.04, "hspace": 0.04})
+    for f, (escena, nombre_f) in enumerate([("calma", "Calma"), ("terror", "Terror")]):
+        for c, (perfil, nombre_c) in enumerate([("minimo", "Mínimo"), ("llamativo", "Llamativo")]):
+            ax = ejes[f][c]
+            ax.imshow(plt.imread(capturas / f"{perfil}_{escena}.png"))
+            ax.set_xticks([]); ax.set_yticks([])
+            for lado in ax.spines.values():
+                lado.set_visible(False)
+            if f == 0:
+                ax.set_title(nombre_c, pad=3)
+            if c == 0:
+                ax.set_ylabel(nombre_f)
+    fig.savefig(salida / "estimulo.pdf", bbox_inches="tight", dpi=200)
+    fig.savefig(salida / "estimulo.png", bbox_inches="tight", dpi=200)
+    plt.close(fig)
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("anotacion")
     p.add_argument("registro")
     p.add_argument("-o", "--salida", default="docs/figuras")
+    p.add_argument("--capturas", help="Carpeta con las capturas del estímulo para la Fig. de estímulo.")
     a = p.parse_args(argv)
     salida = Path(a.salida)
     salida.mkdir(parents=True, exist_ok=True)
     figura_anotacion(json.loads(Path(a.anotacion).read_text(encoding="utf-8")), salida)
     figura_verificacion(json.loads(Path(a.registro).read_text(encoding="utf-8")), salida)
+    if a.capturas:
+        figura_estimulo(Path(a.capturas), salida)
     print(f"Figuras en {salida}")
     return 0
 
