@@ -291,7 +291,7 @@ col(M, "Limitaciones de la prueba", [
   "La anotación no se comparó todavía con anotadores humanos",
   "Fue hecha por Claude en sesión, no por la API",
   "La medición se hizo sin pantalla física",
-  "El matiz base (210°) no tiene criterio teórico",
+  "La paleta (dorado–violeta) es una decisión de diseño, sin respaldo empírico",
 ], C.accent5);
 col(M + 6.3, "Próximos pasos", [
   "Validar la anotación con 2 o 3 lectores humanos",
