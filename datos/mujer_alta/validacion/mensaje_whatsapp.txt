@@ -1,0 +1,42 @@
+*Ayuda para mi tesis (15 min)*
+
+Vas a leer 15 fragmentos de un cuento del siglo XIX, en el orden en que aparecen. No hace falta conocer la historia.
+Para cada fragmento, marcá dos números del 1 al 5 según lo que transmite la escena (no si te gusta cómo está escrito):
+*A* (agradable): 1 = muy desagradable (miedo, tristeza, asco) · 3 = neutro · 5 = muy agradable (alegría, calma placentera).
+*I* (intensidad): 1 = muy calmo, tranquilo · 3 = medio · 5 = muy intenso, agitado (persecución, pánico, euforia).
+No hay respuestas correctas: anotá tu primera impresión. Son unos 15 minutos.
+
+Respondé así, una línea por fragmento:
+1) A2 I4
+2) A3 I1
+...
+
+*1)* o no se entienden semejantes palabras, palabras y palabras, que diría Hamlet. En Derezaba Gabriel, este pintoresco discurso hacién sujetos de diferente edad, pero ninguno joven, y solo uno entrado ya en años. También ingenieros de Montes, tres de ellos, pintor el cuarto, y un poco literato el quinto,
+
+*2)* cristalina fuente colocada por Dios en esta pinífera cumbre para enfriar el vino de los botánicos. Pues, señor, no sé si habréis oído hablar de un ingenio de caminos llamado Telesforo, que murió en 1860. Yo no, yo sí, yo también. Un muchacho andaluz con bigote negro que estuvo para casarse con la hija del Marqués de Moreda
+
+*3)* Con tristadísimo, bien que grave y en apariencia dueño de su dolor, estaba el joven ingeniero, trabajando ya aquella hora con sus ayudantes en no sé qué proyecto de ferrocarril, y vestidos de riguroso luto. Abrazome, estrechísimamente y por largo rato, sin lanzar ni el más leve suspiro.
+
+*4)* y que durará tanto como vivida. ¿Para qué? Tú te lo figurarás fácilmente a poco que entiendas de cuitas humanas, y yo no quiero ser consolado ni ahora, ni después ni nunca. De lo que te voy a hablar con la detención que requiere el caso, o sea, tomando el asunto desde su origen, es de una circunstancia horrenda y misteriosa que ha servido como de agüero infernal a esta desventura,
+
+*5)* como una mujer sola en la calle, a altas horas de la noche. Te consta que nunca he sido cobardé, me batí en duelo como cualquier hombre decente, cierta vez que fue necesario, y recién salido de la escuela de ingenieros, cerré a palos y a tiros en Despeña perros con mis sublevados peones, hasta que los reduce a la obediencia.
+
+*6)* advertí que en el hueco de su cerrada puerta estaba de pie, inmóvil y rígida, como si fuese de palo, una mujer muy alta y fuerte, como de sesenta años de edad, cuyos malignos y audaces ojos impestañas se clavaron en los míos como dos puñales, mientras que su desdentada boca me hizo una muerca horrible por vía de sonrisa.
+
+*7)* que por temora que mi propio miedo le revelase quién era yo, o le dié sealas para seguirme, para acometerme, para... no sé, los peligros que sueña el pánico no tienen forma ni nombre traducibles. Mi casa estaba al extremo opuesto de la prolongada y angosta calle en que me hallaba yo solo, enteramente solo, con aquella misteriosa estantigua a quien creía capaz de aniquilarme con una palabra.
+
+*8)* no se desnudase, pues él volvería a la manecer. Semejantes palabras me dejaron frío de dolor y espanto, cual si me hubieran notificado mi propia muerte. Sabedor yo de que mi amadísimo padre, residente en Jaén, padecía aquel invierno frecuente y peligrosísimos ataques de su crónica enfermedad. Había escrito a mis hermanos que,
+
+*9)* Y Dios solo sabe cuánto padecí en aquellas dos horas de cruel expectativa, durante las cuales, lo que tiene relación con la presente historia, no podía separar en mi mente tres ideas distintas y, al parecer, heterogéneas que se empeñaban en formar monstruoso y tremendo grupo. Mi pérdida al juego, el encuentro con la mujer alta
+
+*10)* y la muerte de mi honrado padre. A las seis en punto penetró en mi despacho el comandante Falcón y me miró en silencio. Arrojéme en sus brazos llorando desconsoladamente y él exclamó acariciándome. ¡Lloras y hombre llora! Y, ojalá, ese dolor pudiera sentirse muchas veces.
+
+*11)* Y ocurra intentar alcanzarla. Además, por la carrera de San Jerónimo pasaba ya alguna gente, y por la calle del Prado también. Era completamente de día. La mujer alta siguió corriendo o volando hasta la calle de las huertas, alumbrada ya por el sol. Paróse allí a mirarme. Amenazóme una vez y otra vez esgrimió el abaniquillo cerrado
+
+*12)* ¿Quién es? ¿Qué es? Os hago gracias, mis queridos amigos, continuó Gabriel, de las reflexiones y argumentos que emplearía yo para ver de tranquilizar el esforo. Pues son los mismos, mismísimos que estáis vosotros preparando ahora para que en mi historia no pasa nada sobrenatural o sobrehumano.
+
+*13)* ¿Vosotros diréis más? ¿Vosotros diréis que mi amigo estaba medio loco? Que lo estuvo siempre. Que cuando menos padecía la enfermedad moral, llamadas por unos terror pánico y por otros delirio emotivo. Que, aun siendo verdad, todo lo que refería acerca de la mujer alta
+
+*14)* que hallar explicación a ciertas cosas que pasan en la tierra. Habla, habla, voy allá. Y esta vez, por ser ya la última, reanudaré el hilo de mi historia sin beberme antes un vaso de vino. A los pocos días de aquella conversación con teléforo fui destinado a la provincia de Albacete
+
+*15)* de la calle de jardines y de la del lobo, como desafiándome, como declarándome heredero del odio que había profesado a mi infortunado amigo. Confieso que entonces mi video fue superior a la maravilla que me causaban aquellas nuevas coincidencias o casualidades. Veía patente que alguna relación sobrenatural anterior
