@@ -55,8 +55,8 @@ const servidor = http.createServer((req, res) => {
       b: [A.segmentoActivo(segs, -1), A.segmentoActivo(segs, 0), A.segmentoActivo(segs, 19.9), A.segmentoActivo(segs, 20), A.segmentoActivo(segs, 99)],
       hueWrap: A.suavizar({ H: 350, S: 0, L: 0 }, { H: 10, S: 0, L: 0 }, 1e9, 1).H };
   });
-  assert.deepStrictEqual(unit.o, { H: 230, S: 0.45, L: 0.35 });
-  assert.ok(Math.abs(unit.o0.H - 10) < 1e-9 && unit.o0.S === 0.2 && unit.o0.L === 0.15);
+  assert.deepStrictEqual(unit.o, { H: 310, S: 0.6, L: 0.55 });
+  assert.ok(Math.abs(unit.o0.H - 90) < 1e-9 && unit.o0.S === 0.35 && unit.o0.L === 0.35);
   assert.ok(Math.abs(unit.c.S - (1 - Math.exp(-1))) < 1e-9);
   assert.ok(Math.abs(unit.L - 0.32) < 1e-9);
   assert.deepStrictEqual(unit.b, [-1, 0, 0, 1, 2]);

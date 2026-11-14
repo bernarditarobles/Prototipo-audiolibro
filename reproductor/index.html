@@ -91,23 +91,16 @@
 
 /* ===================== Núcleo: mapeo de la narración al estímulo (IV-C) ===================== */
 const Ambientacion = (() => {
-  // Cuadro I (ampliado). S, L, dH, tau y k definen el color (ecuaciones 1-5).
-  // vel, turb, contraste y varH definen la textura abstracta en movimiento:
-  //   vel  = velocidad de deriva de la niebla (unidades de textura por segundo), interpolada con a.
-  //   turb = turbulencia / deformación de la niebla, interpolada con a.
-  //   contraste = amplitud de la variación de luminosidad dentro de la textura.
-  //   varH = variación local de matiz (grados) dentro de la textura.
+  // Cuadro I. S, L, dH, tau y k definen el color (ecuaciones 1-5). El matiz base H0
+  // viene del archivo de anotación (matiz_base).
   const PERFILES = {
-    minimo:    { S: [0.20, 0.45], L: [0.15, 0.35], dH: 20, tau: 6.0, k: 0.02,
-                 vel: [0.012, 0.05], turb: [0.25, 0.65], contraste: 0.30, varH: 8 },
-    llamativo: { S: [0.70, 1.00], L: [0.40, 0.65], dH: 60, tau: 0.5, k: 0.15,
-                 vel: [0.10, 0.60], turb: [0.60, 1.40], contraste: 0.60, varH: 35 },
+    minimo:    { S: [0.35, 0.60], L: [0.35, 0.55], dH: 100, tau: 6.0, k: 0.02 },
+    llamativo: { S: [0.70, 1.00], L: [0.45, 0.65], dH: 130, tau: 0.5, k: 0.15 },
     // Control: fondo neutro y estático (VI-B). Sin matiz, sin transición, sin modulación.
     control:   { estatico: { H: 0, S: 0, L: 0.25 } },
   };
 
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
-  const lerp = (r, t) => r[0] + t * (r[1] - r[0]);
 
   // Ecuaciones (1)-(3): color objetivo del segmento i.
   function objetivo(perfil, H0, v, a) {
@@ -129,14 +122,8 @@ const Ambientacion = (() => {
     };
   }
 
-  // Suavizado escalar con la misma constante de tiempo (para la activación que mueve la textura).
-  function suavizarEscalar(x, meta, dt, tau) { return x + (1 - Math.exp(-dt / tau)) * (meta - x); }
-
   // Ecuación (5): luminosidad mostrada = suavizada + k·r(t).
   function luminosidadMostrada(Ls, k, r) { return clamp(Ls + k * clamp(r, 0, 1), 0, 1); }
-
-  // Parámetros de movimiento de la textura a partir de la activación suavizada.
-  function movimiento(perfil, a) { return { vel: lerp(perfil.vel, a), turb: lerp(perfil.turb, a) }; }
 
   // Segmento activo por búsqueda binaria: último segmento con inicio <= t.
   function segmentoActivo(segmentos, t) {
@@ -160,111 +147,29 @@ const Ambientacion = (() => {
     return errores;
   }
 
-  return { PERFILES, objetivo, suavizar, suavizarEscalar, luminosidadMostrada, movimiento, segmentoActivo, validarAnotacion };
+  return { PERFILES, objetivo, suavizar, luminosidadMostrada, segmentoActivo, validarAnotacion };
 })();
 window.Ambientacion = Ambientacion;
 
-/* ===================== Renderizado: niebla abstracta (WebGL) con respaldo 2D ===================== */
-// Paso 4. Campo de niebla abstracta a pantalla completa, sin formas ni figuras (R3).
-// El color medio es el de las ecuaciones (1)-(5); la textura modula la luminosidad y,
-// levemente, el matiz alrededor de ese valor, y deriva a la velocidad fijada por la activación.
-function crearRenderizador(lienzo) {
-  const gl = lienzo.getContext("webgl", { antialias: false, alpha: false, preserveDrawingBuffer: true });
-  if (!gl) return crearRenderizador2D(lienzo);
-  const conRespaldo = (e) => {
-    // Un lienzo con contexto WebGL no admite contexto 2D: se reemplaza por uno nuevo.
-    console.warn("WebGL no disponible, se usa el gradiente 2D:", e);
-    const nuevo = lienzo.cloneNode();
-    lienzo.replaceWith(nuevo);
-    return crearRenderizador2D(nuevo);
-  };
-
-  const vs = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
-  const fs = `
-    precision highp float;
-    uniform vec2 uRes; uniform float uFase; uniform vec3 uHSL;
-    uniform float uTurb, uContraste, uVarH;
-    float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
-    float ruido(vec2 p){
-      vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
-      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
-    }
-    float fbm(vec2 p){
-      float v = 0.0, a = 0.5; mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
-      for (int i = 0; i < 5; i++) { v += a * ruido(p); p = m * p; a *= 0.5; }
-      return v;
-    }
-    vec3 hsl2rgb(vec3 c){
-      vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
-      return c.z + c.y * (rgb - 0.5) * (1.0 - abs(2.0 * c.z - 1.0));
-    }
-    void main(){
-      vec2 uv = gl_FragCoord.xy / uRes;
-      vec2 p = (gl_FragCoord.xy - 0.5 * uRes) / min(uRes.x, uRes.y) * 2.2;
-      float t = uFase;
-      vec2 q = vec2(fbm(p + vec2(0.0, t)), fbm(p + vec2(5.2, 1.3) - vec2(0.7 * t, 0.0)));
-      vec2 r = vec2(fbm(p + 3.0 * uTurb * q + vec2(1.7, 9.2) + 0.5 * t),
-                    fbm(p + 3.0 * uTurb * q + vec2(8.3, 2.8) - 0.4 * t));
-      float n = fbm(p + 3.0 * uTurb * r);
-      float vineta = mix(1.0, 0.6, smoothstep(0.25, 0.85, length(uv - 0.5)));
-      float L = uHSL.z * (1.0 + uContraste * (n - 0.5) * 2.0) * vineta;
-      float H = uHSL.x / 360.0 + uVarH / 360.0 * (r.x - 0.5) * 2.0;
-      vec3 col = hsl2rgb(vec3(fract(H), uHSL.y, clamp(L, 0.0, 1.0)));
-      col += (hash(gl_FragCoord.xy + fract(t)) - 0.5) / 255.0; // tramado contra bandas
-      gl_FragColor = vec4(col, 1.0);
-    }`;
-  const compilar = (tipo, src) => {
-    const s = gl.createShader(tipo); gl.shaderSource(s, src); gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
-    return s;
-  };
-  let prog;
-  try {
-    prog = gl.createProgram();
-    gl.attachShader(prog, compilar(gl.VERTEX_SHADER, vs));
-    gl.attachShader(prog, compilar(gl.FRAGMENT_SHADER, fs));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
-  } catch (e) {
-    return conRespaldo(e);
-  }
-  gl.useProgram(prog);
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-  const loc = gl.getAttribLocation(prog, "p");
-  gl.enableVertexAttribArray(loc);
-  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const u = (n) => gl.getUniformLocation(prog, n);
-  const U = { res: u("uRes"), fase: u("uFase"), hsl: u("uHSL"), turb: u("uTurb"), con: u("uContraste"), varH: u("uVarH") };
-
-  return {
-    tipo: "webgl", lienzo,
-    dibujar({ H, S, L, fase = 0, turb = 0, contraste = 0, varH = 0 }) {
-      gl.viewport(0, 0, lienzo.width, lienzo.height);
-      gl.uniform2f(U.res, lienzo.width, lienzo.height);
-      gl.uniform1f(U.fase, fase % 1000);
-      gl.uniform3f(U.hsl, H, S, L);
-      gl.uniform1f(U.turb, turb);
-      gl.uniform1f(U.con, contraste);
-      gl.uniform1f(U.varH, varH);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    },
-  };
-}
-
-function crearRenderizador2D(destino) {
-  // Respaldo sin WebGL: gradiente radial difuso (versión original del diseño).
+/* ===================== Renderizado: resplandor radial difuso ===================== */
+// Paso 4. Gradiente radial difuso a pantalla completa, sin formas ni figuras (R3):
+// una luz suave en el centro con el color de las ecuaciones (1)-(5), que se apaga hacia
+// los bordes en un tono vecino más oscuro.
+function crearRenderizador(destino) {
   const ctx = destino.getContext("2d", { alpha: false });
   return {
     tipo: "2d", lienzo: destino,
     dibujar({ H, S, L }) {
       const w = destino.width, h = destino.height;
-      const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.hypot(w, h) / 2);
+      ctx.setTransform(1, 0, 0, h / w, 0, 0); // elipse con la proporción de la pantalla
+      const r = w * 0.72;
+      const g = ctx.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, r);
       g.addColorStop(0, hsl(H, S, L));
-      g.addColorStop(1, hsl(H, S, L * 0.6));
+      g.addColorStop(0.45, hsl(H - 12, S * 0.9, L * 0.72));
+      g.addColorStop(1, hsl(H - 30, S * 0.75, L * 0.22));
       ctx.fillStyle = g;
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, w, w);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
     },
   };
 }
@@ -279,8 +184,8 @@ const lienzo = render.lienzo;
 
 const sesion = {
   doc: null, condicion: "minimo", modo: "desarrollo", participante: "",
-  perfil: null, H0: 210,
-  color: null, aSuave: 0, fase: 0, segIdx: -1, r: 0, picoRMS: 1e-3,
+  perfil: null, H0: 355,
+  color: null, segIdx: -1, r: 0, picoRMS: 1e-3,
   registro: { cambios: [], fps: [], eventos: [] },
   ultimoT: null, cuadrosSeg: 0, inicioSeg: 0, cuadrosLentos: 0, terminado: false,
 };
@@ -290,8 +195,8 @@ let analizador = null, bufRMS = null;
 
 function dimensionar() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  // Resolución reducida: la niebla es difusa y así se aligera el dibujo.
-  const escala = render.tipo === "webgl" ? 0.4 : 0.5;
+  // Resolución reducida: el gradiente es difuso y así se aligera el dibujo.
+  const escala = 0.5;
   lienzo.width = Math.max(1, Math.round(innerWidth * dpr * escala));
   lienzo.height = Math.max(1, Math.round(innerHeight * dpr * escala));
   if (sesion.doc) prepararLinea();
@@ -337,17 +242,13 @@ function cuadro(ahora) {
       }
       sesion.segIdx = idx;
     }
-    // Paso 3: color (ecuaciones 1-5) y movimiento de la textura (activación suavizada)
+    // Paso 3: color (ecuaciones 1-5)
     const s = idx >= 0 ? sesion.doc.segmentos[idx] : { valencia: 0, activacion: 0 };
     const meta = Ambientacion.objetivo(p, sesion.H0, s.valencia, s.activacion);
     sesion.color = sesion.color ? Ambientacion.suavizar(sesion.color, meta, dt, p.tau) : meta;
-    sesion.aSuave = Ambientacion.suavizarEscalar(sesion.aSuave, s.activacion, dt, p.tau);
-    const mov = Ambientacion.movimiento(p, sesion.aSuave);
-    if (!audio.paused) sesion.fase += dt * mov.vel;
     const L = Ambientacion.luminosidadMostrada(sesion.color.L, p.k, audio.paused ? 0 : sesion.r);
     // Paso 4
-    render.dibujar({ H: sesion.color.H, S: sesion.color.S, L, fase: sesion.fase, turb: mov.turb, contraste: p.contraste, varH: p.varH });
-    sesion.mov = mov;
+    render.dibujar({ H: sesion.color.H, S: sesion.color.S, L });
   }
 
   if (sesion.modo === "desarrollo") actualizarPanel(t);
@@ -456,7 +357,6 @@ function actualizarPanel(t) {
     `${mm(t)} · segmento ${sesion.segIdx + 1}/${segs.length}` +
     (s ? ` · valencia ${s.valencia.toFixed(2)} · activación ${s.activacion.toFixed(2)}` : "") +
     (c ? ` → H ${c.H.toFixed(0)}° S ${c.S.toFixed(2)} L ${c.L.toFixed(2)}` : "") +
-    (sesion.mov ? ` · movimiento ${sesion.mov.vel.toFixed(3)}` : "") +
     ` · voz ${sesion.r.toFixed(2)}` + (f ? ` · ${f.fps} fps` : "");
 }
 
@@ -555,7 +455,7 @@ $("formulario").addEventListener("submit", async (e) => {
     if (errores.length) throw new Error("Anotación inválida:\n" + errores.slice(0, 10).join("\n"));
 
     sesion.doc = doc;
-    sesion.H0 = typeof doc.matiz_base === "number" ? doc.matiz_base : 210;
+    sesion.H0 = typeof doc.matiz_base === "number" ? doc.matiz_base : 355;
     sesion.condicion = $("condicion").value;
     sesion.modo = $("modo").value;
     sesion.participante = $("participante").value.trim();
