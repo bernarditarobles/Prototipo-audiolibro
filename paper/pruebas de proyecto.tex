@@ -142,7 +142,7 @@ El reproductor es una página web que reproduce el audio y muestra la ambientaci
 \item \textbf{Lectura del audio.} Obtiene la posición de reproducción $t$ y la energía de la señal en ese instante, normalizada como $r(t) \in [0, 1]$.
 \item \textbf{Búsqueda del segmento activo.} Identifica en el archivo JSON el segmento $i$ cuyo intervalo contiene a $t$.
 \item \textbf{Cálculo del color.} Obtiene los valores objetivo de matiz, saturación y luminosidad a partir de $a_i$ y $v_i$, los aproxima de forma gradual y suma una leve modulación según la intensidad de la voz, siguiendo el enfoque de Graf et al. \cite{graf2021}.
-\item \textbf{Renderizado.} Dibuja un gradiente radial difuso que ocupa toda la pantalla, sin formas ni figuras (R3).
+\item \textbf{Renderizado.} Dibuja gradientes radiales difusos que ocupan toda la pantalla, sin formas ni figuras (R3), y muestra en una esquina una tarjeta con la portada, el título y el avance de la obra.
 \end{enumerate}
  
 El reproductor no ofrece más controles que los de reproducción, por lo que el oyente no necesita interactuar con el estímulo (R1). Los parámetros del mapeo se agrupan en perfiles, que se seleccionan al iniciar la sesión.
@@ -178,9 +178,9 @@ Todos los parámetros se agrupan en perfiles configurables. El perfil \textit{m�
 \hline
 Parámetro & Mínimo & Llamativo \\
 \hline
-$[S_{\min}, S_{\max}]$ & $[0{,}35;\ 0{,}60]$ & $[0{,}70;\ 1{,}00]$ \\
-$[L_{\min}, L_{\max}]$ & $[0{,}35;\ 0{,}55]$ & $[0{,}45;\ 0{,}65]$ \\
-$\Delta H$ & $100^\circ$ & $130^\circ$ \\
+$[S_{\min}, S_{\max}]$ & $[0{,}55;\ 0{,}80]$ & $[0{,}85;\ 1{,}00]$ \\
+$[L_{\min}, L_{\max}]$ & $[0{,}38;\ 0{,}52]$ & $[0{,}45;\ 0{,}65]$ \\
+$\Delta H$ & $21^\circ$ & $30^\circ$ \\
 $\tau$ & 6~s & 0,5~s \\
 $k$ & 0,02 & 0,15 \\
 \hline
@@ -192,9 +192,9 @@ $k$ & 0,02 & 0,15 \\
  
 El preprocesamiento se implementa en Python. La transcripción usa el modelo \textit{small} de Whisper \cite{radford2023} con marcas temporales por frase. La anotación afectiva se realiza mediante la API de un modelo de lenguaje, y las respuestas se validan antes de escribirse en el archivo de salida: si una respuesta no cumple el formato o los rangos esperados, el segmento se vuelve a anotar. En esta prueba de concepto no se contó con acceso a la API, por lo que la anotación de la obra la realizó el modelo Claude (Anthropic) en una sesión interactiva, con la misma instrucción y la misma validación de formato y rangos. Por eso, esta anotación no puede reproducirse ejecutando el módulo, aunque los valores y la instrucción quedan registrados.
  
-El reproductor se implementa en JavaScript como una página web autocontenida, sin dependencias externas. El audio se reproduce con el elemento \texttt{audio} de HTML5, y la Web Audio API, mediante un \texttt{AnalyserNode}, entrega la energía de la señal para calcular $r(t)$. El ciclo de animación se sincroniza con la frecuencia de actualización de la pantalla mediante \texttt{requestAnimationFrame}, y el gradiente se dibuja sobre un elemento \texttt{canvas}. Como los segmentos están ordenados en el tiempo, el segmento activo se localiza mediante búsqueda binaria. En el modo de experimento, el reproductor impide pausar o saltar en el audio y genera un registro con cada cambio de segmento y la tasa de cuadros de cada segundo, que se usa en la verificación técnica. En un modo de desarrollo, que no se muestra a los participantes, agrega un panel con la frase narrada y una línea de tiempo de la anotación, para inspeccionar y demostrar el sistema.
+El reproductor se implementa en JavaScript como una página web autocontenida, sin dependencias externas. El audio se reproduce con el elemento \texttt{audio} de HTML5, y la Web Audio API, mediante un \texttt{AnalyserNode}, entrega la energía de la señal para calcular $r(t)$. El ciclo de animación se sincroniza con la frecuencia de actualización de la pantalla mediante \texttt{requestAnimationFrame}, y los gradientes se dibujan sobre un elemento \texttt{canvas}: tres gradientes radiales fijos, con el color calculado y dos tonos vecinos, que dan profundidad a la imagen sin movimiento. Como los segmentos están ordenados en el tiempo, el segmento activo se localiza mediante búsqueda binaria. En el modo de experimento, el reproductor impide pausar o saltar en el audio y genera un registro con cada cambio de segmento y la tasa de cuadros de cada segundo, que se usa en la verificación técnica. En un modo de demostración, que no se muestra a los participantes, agrega una etiqueta con el clima del momento (por ejemplo, calma o tensión), derivado de la valencia y la activación, controles para pausar y saltar, y un panel opcional con la frase narrada y una línea de tiempo de la anotación, para inspeccionar y demostrar el sistema.
  
-La prueba de concepto se aplica a una obra de ficción en español en dominio público, narrada por voluntarios de LibriVox: \textit{La mujer alta}, cuento de Pedro Antonio de Alarcón, en una grabación de 36~min 16~s con un único narrador. Whisper la transcribió en unos seis minutos, en un equipo de cuatro núcleos sin GPU, y produjo 612 frases, agrupadas en 100 segmentos de entre 20 y 27~s. La Fig.~\ref{fig:anotacion} muestra la anotación resultante: la valencia media es $-0{,}48$ y la activación media, $0{,}53$, con picos en los encuentros con la mujer alta. Se usa un matiz base $H_0 = 355^\circ$, de modo que los segmentos de valencia positiva se ven en tonos cálidos (dorados) y los de valencia negativa, en tonos fríos (violetas). La Fig.~\ref{fig:estimulo} muestra el estímulo de ambos perfiles.
+La prueba de concepto se aplica a una obra de ficción en español en dominio público, narrada por voluntarios de LibriVox: \textit{La mujer alta}, cuento de Pedro Antonio de Alarcón, en una grabación de 36~min 16~s con un único narrador. Whisper la transcribió en unos seis minutos, en un equipo de cuatro núcleos sin GPU, y produjo 612 frases, agrupadas en 100 segmentos de entre 20 y 27~s. La Fig.~\ref{fig:anotacion} muestra la anotación resultante: la valencia media es $-0{,}48$ y la activación media, $0{,}53$, con picos en los encuentros con la mujer alta. Se usa un matiz base $H_0 = 15^\circ$, de modo que los segmentos de valencia positiva se ven en tonos ámbar y los de valencia negativa, en rojos profundos. La Fig.~\ref{fig:estimulo} muestra el estímulo de ambos perfiles.
 
 \begin{figure}[t]
 \centering
@@ -212,7 +212,7 @@ La prueba de concepto se aplica a una obra de ficción en español en dominio p�
  
 La verificación técnica del sistema evalúa tres aspectos. Primero, la sincronización: se mide el desfase entre el inicio de cada segmento y el momento en que el reproductor cambia de color. Segundo, la fluidez: se registra la tasa de cuadros por segundo del reproductor durante una sesión completa, para comprobar que la animación no se degrada con el tiempo. Tercero, la validez de la anotación: se comparan la valencia y la activación asignadas por el modelo con las asignadas por anotadores humanos en una muestra de segmentos.
 
-Para los dos primeros aspectos, se reprodujo la obra completa con el perfil mínimo en modo experimento, en el navegador Chromium sin interfaz gráfica, en el mismo equipo (Fig.~\ref{fig:verificacion}). En los 100 cambios de segmento, el desfase medio fue de 8,1~ms y el máximo, de 20,2~ms, despreciable frente a la constante de tiempo del perfil mínimo ($\tau = 6$~s). Este desfase se mide con la posición que informa el elemento \texttt{audio}, por lo que no incluye la latencia del sonido ni de la pantalla. Durante los 2156 segundos registrados, la tasa media fue de 60,0 cuadros por segundo, con un mínimo de 58,1, sin degradación con el tiempo: 60,0 en el primer 10\,\% de la sesión y 60,0 en el último. La validez de la anotación no se evaluó, porque no se contó con anotadores humanos en el plazo disponible.
+Para los dos primeros aspectos, se reprodujo la obra completa con el perfil mínimo en modo experimento, en el navegador Chromium sin interfaz gráfica, en el mismo equipo (Fig.~\ref{fig:verificacion}). En los 100 cambios de segmento, el desfase medio fue de 11,8~ms y el máximo, de 20,2~ms, despreciable frente a la constante de tiempo del perfil mínimo ($\tau = 6$~s). Este desfase se mide con la posición que informa el elemento \texttt{audio}, por lo que no incluye la latencia del sonido ni de la pantalla. Durante los 2157 segundos registrados, la tasa media fue de 60,0 cuadros por segundo, con un mínimo de 56,1, sin degradación con el tiempo: 60,0 en el primer 10\,\% de la sesión y 60,0 en el último. La validez de la anotación no se evaluó, porque no se contó con anotadores humanos en el plazo disponible.
 
 \begin{figure}[t]
 \centering
@@ -228,7 +228,7 @@ Para los dos primeros aspectos, se reprodujo la obra completa con el perfil mín
 Se propone un diseño entre sujetos con tres condiciones: el grupo de control escucha el audiolibro con la pantalla fija, sin cambios; el segundo grupo lo escucha con una ambientación suave (perfil mínimo), y el tercero, con una ambientación exagerada (perfil llamativo). Cada participante pasa por una sola condición, lo que evita que una afecte a las siguientes y permite usar el mismo texto en los tres grupos. Los participantes son adultos con español como lengua materna, visión normal o corregida y sin conocimiento previo de la obra.
  
 \subsection{Procedimiento}
-Cada participante escucha la misma obra completa, de 36 minutos, frente a una pantalla, en un ambiente de iluminación controlada. En la condición de control, la pantalla muestra un fondo neutro y estático. No se permite pausar ni retroceder el audio. Antes de comenzar, el participante completa el cuestionario de fatiga visual. Al finalizar, completa las medidas de comprensión e inmersión y repite el cuestionario de fatiga visual.
+Cada participante escucha la misma obra completa, de 36 minutos, frente a una pantalla, en un ambiente de iluminación controlada. En la condición de control, la pantalla muestra un fondo neutro y estático, con la misma tarjeta de la obra. No se permite pausar ni retroceder el audio. Antes de comenzar, el participante completa el cuestionario de fatiga visual. Al finalizar, completa las medidas de comprensión e inmersión y repite el cuestionario de fatiga visual.
  
 \subsection{Medidas}
 \begin{itemize}
