@@ -33,7 +33,7 @@ def main(argv=None) -> int:
     p.add_argument("--modelo-whisper", default="medium")
     p.add_argument("--idioma", default="es")
     p.add_argument("--d-min", type=float, default=D_MIN_POR_DEFECTO, help="Duración mínima de segmento en s (por defecto 20).")
-    p.add_argument("--matiz-base", type=float, default=355.0, help="Matiz base H0 de la obra, en grados (0-360).")
+    p.add_argument("--matiz-base", type=float, default=15.0, help="Matiz base H0 de la obra, en grados (0-360).")
     p.add_argument("--titulo", default="")
     p.add_argument("--autor", default="")
     p.add_argument("--modelo-llm", default=MODELO_POR_DEFECTO)

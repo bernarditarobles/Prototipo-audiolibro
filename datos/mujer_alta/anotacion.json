@@ -3,7 +3,7 @@
   "titulo": "La mujer alta",
   "autor": "Pedro Antonio de Alarcón",
   "audio": "mujer_alta_128kb.mp3",
-  "matiz_base": 355,
+  "matiz_base": 15,
   "d_min": 20.0,
   "modelo_anotacion": "Claude, anotación en sesión de Claude Code con la instrucción de preprocesamiento/anotar.py (no vía API)",
   "generado": "2026-11-06T18:28:10+00:00",
