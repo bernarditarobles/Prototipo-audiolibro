@@ -7,15 +7,53 @@
 <style>
   html, body { margin: 0; height: 100%; background: #000; color: #ddd; font: 16px/1.4 system-ui, sans-serif; overflow: hidden; }
   #lienzo { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
-  #config { position: fixed; inset: 0; overflow: auto; background: #111; padding: 24px 16px; box-sizing: border-box; z-index: 3; }
-  #config form { max-width: 560px; margin: 0 auto; display: grid; gap: 14px; }
-  #config h1 { font-size: 1.3rem; margin: 0 0 4px; }
-  label { display: grid; gap: 4px; font-size: .9rem; color: #aaa; }
-  label.fila { display: flex; gap: 8px; align-items: center; }
   input, select, button { font: inherit; padding: 8px; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; }
   button { cursor: pointer; background: #2d4a6b; border-color: #3d6290; }
-  .nota { font-size: .8rem; color: #888; margin: 0; }
-  #error { color: #f88; white-space: pre-wrap; }
+
+  /* Pantalla de inicio */
+  #config { position: fixed; inset: 0; overflow: auto; z-index: 3; background: #0d0b12; padding: 32px 16px; box-sizing: border-box;
+    display: grid; place-items: center; }
+  #config::before { content: ""; position: fixed; inset: -10%; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 55% 50% at 50% 45%, hsl(40 70% 52%) 0%, hsl(25 55% 30%) 45%, #0d0b12 85%);
+    animation: respirar 14s ease-in-out infinite alternate; }
+  @keyframes respirar { from { filter: hue-rotate(0deg) brightness(1); } to { filter: hue-rotate(-130deg) brightness(.8); } }
+  @media (prefers-reduced-motion: reduce) { #config::before { animation: none; } }
+  #config form { width: 100%; max-width: 560px; display: grid; gap: 18px; padding: 28px; box-sizing: border-box;
+    background: rgba(14, 12, 20, .72); border: 1px solid rgba(255,255,255,.12); border-radius: 18px;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+  .marca h1 { font: 700 2rem/1.1 Georgia, "Times New Roman", serif; margin: 0; color: #fff; letter-spacing: .01em; }
+  .marca p { margin: 6px 0 0; color: #c9c3d6; font-size: .95rem; }
+  .rotulo { font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: #a39cb3; margin: 0 0 8px; }
+  .oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  #zona { display: grid; gap: 8px; padding: 16px; border: 1.5px dashed rgba(255,255,255,.28); border-radius: 12px; cursor: pointer;
+    text-align: center; transition: border-color .2s, background .2s; }
+  #zona:hover, #zona.encima { border-color: hsl(40 80% 60%); background: rgba(255,255,255,.04); }
+  #zona strong { color: #fff; font-weight: 600; }
+  #zona small { color: #a39cb3; }
+  .archivos { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chip { font-size: .85rem; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.07); color: #a39cb3; }
+  .chip.ok { background: rgba(120, 200, 140, .16); color: #b9ecc6; }
+  .tarjetas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .tarjeta { display: grid; gap: 8px; justify-items: center; padding: 12px 8px; border-radius: 12px; cursor: pointer; text-align: center;
+    background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.1); color: #ddd; font-size: .9rem; }
+  .tarjeta small { color: #a39cb3; font-size: .75rem; line-height: 1.25; }
+  .tarjeta[aria-checked="true"] { border-color: #fff; background: rgba(255,255,255,.1); color: #fff; }
+  .muestra { width: 54px; height: 32px; border-radius: 8px; }
+  .m-control { background: hsl(0 0% 25%); }
+  .m-minimo { background: linear-gradient(90deg, hsl(40 40% 40%), hsl(275 45% 45%)); }
+  .m-llamativo { background: linear-gradient(90deg, hsl(48 85% 55%), hsl(235 95% 58%)); }
+  .interruptor { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 12px; background: rgba(255,255,255,.06); }
+  .interruptor button { border: 0; background: transparent; color: #c9c3d6; padding: 9px; border-radius: 9px; }
+  .interruptor button[aria-pressed="true"] { background: rgba(255,255,255,.14); color: #fff; }
+  #filaParticipante { display: none; }
+  #filaParticipante.visible { display: grid; gap: 6px; }
+  #filaParticipante input { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); }
+  .nota { font-size: .8rem; color: #a39cb3; margin: 0; }
+  #comenzar { padding: 13px; font-size: 1.05rem; font-weight: 600; border: 0; border-radius: 12px; color: #1b1420;
+    background: linear-gradient(90deg, hsl(40 80% 62%), hsl(330 60% 66%)); }
+  #comenzar:hover { filter: brightness(1.08); }
+  #error { color: #ff9a9a; white-space: pre-wrap; }
+  @media (max-width: 480px) { .tarjetas { grid-template-columns: 1fr; } #config form { padding: 20px; } }
   #fin { position: fixed; inset: 0; display: none; place-items: center; z-index: 4; background: rgba(0,0,0,.85); text-align: center; }
   #fin div { display: grid; gap: 12px; }
 
@@ -38,30 +76,55 @@
 
 <div id="config">
   <form id="formulario">
-    <h1>Ambientación visual reactiva para audiolibros</h1>
-    <label>Archivo de anotación (JSON del preprocesamiento)
-      <input type="file" id="archivoAnotacion" accept=".json,application/json">
-    </label>
-    <label>Audio de la narración
-      <input type="file" id="archivoAudio" accept="audio/*">
-    </label>
-    <label>Condición
-      <select id="condicion">
-        <option value="control">Control (pantalla fija)</option>
-        <option value="minimo" selected>Perfil mínimo</option>
-        <option value="llamativo">Perfil llamativo</option>
+    <div class="marca">
+      <h1>Escuchar y ver</h1>
+      <p>Ambientación visual reactiva para audiolibros</p>
+    </div>
+
+    <div>
+      <p class="rotulo">1 · Archivos</p>
+      <label id="zona" for="archivos">
+        <strong>Elige o arrastra aquí la anotación y el audio</strong>
+        <small>el archivo .json del preprocesamiento y la narración (.mp3)</small>
+        <span class="archivos"><span class="chip" id="chipJson">Anotación .json</span><span class="chip" id="chipAudio">Audio</span></span>
+      </label>
+      <input class="oculto" type="file" id="archivos" accept=".json,application/json,audio/*" multiple>
+      <input class="oculto" type="file" id="archivoAnotacion" accept=".json,application/json" tabindex="-1" aria-hidden="true">
+      <input class="oculto" type="file" id="archivoAudio" accept="audio/*" tabindex="-1" aria-hidden="true">
+    </div>
+
+    <div>
+      <p class="rotulo">2 · Condición</p>
+      <div class="tarjetas" role="radiogroup" aria-label="Condición">
+        <div class="tarjeta" role="radio" tabindex="0" data-valor="control" aria-checked="false"><span class="muestra m-control"></span>Control<small>pantalla fija</small></div>
+        <div class="tarjeta" role="radio" tabindex="0" data-valor="minimo" aria-checked="true"><span class="muestra m-minimo"></span>Mínimo<small>suave, el propuesto</small></div>
+        <div class="tarjeta" role="radio" tabindex="0" data-valor="llamativo" aria-checked="false"><span class="muestra m-llamativo"></span>Llamativo<small>intenso, de contraste</small></div>
+      </div>
+      <select id="condicion" class="oculto" tabindex="-1" aria-hidden="true">
+        <option value="control">Control</option>
+        <option value="minimo" selected>Mínimo</option>
+        <option value="llamativo">Llamativo</option>
       </select>
-    </label>
-    <label>Identificador del participante
+    </div>
+
+    <div>
+      <p class="rotulo">3 · Modo</p>
+      <div class="interruptor">
+        <button type="button" data-modo="desarrollo" aria-pressed="true">Demostración</button>
+        <button type="button" data-modo="experimento" aria-pressed="false">Experimento</button>
+      </div>
+      <select id="modo" class="oculto" tabindex="-1" aria-hidden="true">
+        <option value="desarrollo">Desarrollo</option>
+        <option value="experimento">Experimento</option>
+      </select>
+      <p class="nota" id="notaModo" style="margin-top:8px">Con panel explicativo y controles. Tecla <b>E</b>: mostrar u ocultar el panel; clic en la línea de tiempo: saltar a ese momento.</p>
+    </div>
+
+    <div id="filaParticipante">
+      <p class="rotulo" style="margin:0">Participante</p>
       <input type="text" id="participante" placeholder="P01" autocomplete="off">
-    </label>
-    <label>Modo
-      <select id="modo">
-        <option value="desarrollo">Desarrollo (controles y panel explicativo)</option>
-        <option value="experimento">Experimento (pantalla completa, sin pausa ni retroceso)</option>
-      </select>
-    </label>
-    <p class="nota">En modo desarrollo, la tecla <b>E</b> muestra u oculta el panel explicativo y un clic en la línea de tiempo salta a ese momento.</p>
+    </div>
+
     <div id="error"></div>
     <button type="submit" id="comenzar">Comenzar</button>
   </form>
@@ -442,13 +505,50 @@ async function leerJSON(fuente) {
 const params = new URLSearchParams(location.search);
 for (const k of ["condicion", "modo", "participante"]) if (params.get(k)) $(k).value = params.get(k);
 
+/* ---------- Pantalla de inicio ---------- */
+const elegidos = { anotacion: null, audio: null };
+function tomarArchivos(lista) {
+  for (const f of lista) {
+    if (/\.json$/i.test(f.name) || f.type === "application/json") elegidos.anotacion = f;
+    else if (f.type.startsWith("audio/") || /\.(mp3|wav|ogg|m4a)$/i.test(f.name)) elegidos.audio = f;
+  }
+  const chip = (id, f, txt) => { $(id).textContent = f ? "✓ " + f.name : txt; $(id).classList.toggle("ok", !!f); };
+  chip("chipJson", elegidos.anotacion, "Anotación .json");
+  chip("chipAudio", elegidos.audio, "Audio");
+}
+$("archivos").addEventListener("change", (e) => tomarArchivos(e.target.files));
+const zona = $("zona");
+zona.addEventListener("dragover", (e) => { e.preventDefault(); zona.classList.add("encima"); });
+zona.addEventListener("dragleave", () => zona.classList.remove("encima"));
+zona.addEventListener("drop", (e) => { e.preventDefault(); zona.classList.remove("encima"); tomarArchivos(e.dataTransfer.files); });
+
+function marcarCondicion(v) {
+  $("condicion").value = v;
+  document.querySelectorAll(".tarjeta").forEach((t) => t.setAttribute("aria-checked", String(t.dataset.valor === v)));
+}
+document.querySelectorAll(".tarjeta").forEach((t) => {
+  t.addEventListener("click", () => marcarCondicion(t.dataset.valor));
+  t.addEventListener("keydown", (e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); marcarCondicion(t.dataset.valor); } });
+});
+function marcarModo(m) {
+  $("modo").value = m;
+  document.querySelectorAll(".interruptor button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.modo === m)));
+  $("filaParticipante").classList.toggle("visible", m === "experimento");
+  $("notaModo").innerHTML = m === "experimento"
+    ? "Pantalla completa, sin cursor ni controles. No se puede pausar ni retroceder; al final se descarga el registro (también con <b>Ctrl+Shift+L</b>)."
+    : "Con panel explicativo y controles. Tecla <b>E</b>: mostrar u ocultar el panel; clic en la línea de tiempo: saltar a ese momento.";
+}
+document.querySelectorAll(".interruptor button").forEach((b) => b.addEventListener("click", () => marcarModo(b.dataset.modo)));
+marcarCondicion($("condicion").value);
+marcarModo($("modo").value);
+
 $("formulario").addEventListener("submit", async (e) => {
   e.preventDefault();
   $("error").textContent = "";
   try {
-    const fAnot = $("archivoAnotacion").files[0] || params.get("anotacion");
-    const fAudio = $("archivoAudio").files[0] || params.get("audio");
-    if (!fAnot || !fAudio) throw new Error("Selecciona el archivo de anotación y el audio.");
+    const fAnot = elegidos.anotacion || $("archivoAnotacion").files[0] || params.get("anotacion");
+    const fAudio = elegidos.audio || $("archivoAudio").files[0] || params.get("audio");
+    if (!fAnot || !fAudio) throw new Error("Falta elegir " + (!fAnot && !fAudio ? "la anotación y el audio." : !fAnot ? "la anotación (.json)." : "el audio."));
 
     const doc = await leerJSON(fAnot);
     const errores = Ambientacion.validarAnotacion(doc);
