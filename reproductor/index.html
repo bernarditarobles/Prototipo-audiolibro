@@ -57,6 +57,41 @@
   #fin { position: fixed; inset: 0; display: none; place-items: center; z-index: 4; background: rgba(0,0,0,.85); text-align: center; }
   #fin div { display: grid; gap: 12px; }
 
+  /* Pantalla "Reproduciendo": portada, título y progreso sobre la ambientación */
+  #ahora { position: fixed; inset: 0; z-index: 1; display: none; place-items: center; pointer-events: none;
+    font-family: system-ui, "Segoe UI", sans-serif; color: #fff; transition: transform .4s ease; }
+  #ahora.visible { display: grid; }
+  body.con-panel #ahora { transform: translateY(-22vh) scale(.68); }
+  .tarjeta-libro { display: grid; justify-items: center; gap: 0; width: min(360px, 82vw); text-align: center; }
+  #portada { width: min(240px, 52vw); aspect-ratio: 2 / 3; border-radius: 10px; overflow: hidden; position: relative;
+    box-shadow: 0 30px 70px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08); background: #2a1d38; }
+  #portada img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tapa-generada { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 22px 18px;
+    background: linear-gradient(165deg, #3d2a52 0%, #1a1124 70%); box-sizing: border-box; text-align: left; }
+  .tapa-generada::before { content: ""; position: absolute; left: 12px; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,.12); }
+  .tapa-generada i { font-style: normal; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+  .tapa-generada b { font: 700 28px/1.05 Georgia, "Times New Roman", serif; color: #f6e7c8; }
+  .tapa-generada span { width: 36px; height: 2px; background: #e3b46a; }
+  #tituloObra { margin: 26px 0 0; font: 700 clamp(22px, 3vw, 30px)/1.15 Georgia, "Times New Roman", serif; text-shadow: 0 2px 18px rgba(0,0,0,.35); }
+  #autorObra { margin: 6px 0 0; font-size: 15px; color: rgba(255,255,255,.78); }
+  .progreso { width: 100%; margin-top: 22px; pointer-events: auto; }
+  #barra { height: 5px; border-radius: 5px; background: rgba(255,255,255,.22); overflow: hidden; }
+  #barra b { display: block; height: 100%; width: 0; background: rgba(255,255,255,.9); border-radius: 5px; }
+  body.demo #barra { cursor: pointer; }
+  .tiempos { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,.7); margin-top: 7px; font-variant-numeric: tabular-nums; }
+  #botonPlay { display: none; margin-top: 14px; width: 58px; height: 58px; border-radius: 50%; border: 0; padding: 0; background: rgba(255,255,255,.92);
+    pointer-events: auto; cursor: pointer; place-items: center; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+  body.demo #botonPlay { display: grid; }
+  #botonPlay::before { content: ""; border-left: 16px solid #1b1420; border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 5px; }
+  #botonPlay.sonando::before { border: 0; width: 16px; height: 18px; margin: 0; background: linear-gradient(90deg, #1b1420 0 35%, transparent 35% 65%, #1b1420 65%); }
+  #clima { display: none; margin-top: 18px; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; font-size: 14px;
+    background: rgba(0,0,0,.28); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: opacity .6s; }
+  body.demo #clima { display: inline-flex; }
+  #clima i { width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px currentColor; }
+  #clima small { color: rgba(255,255,255,.65); font-size: 12px; }
+  .ayuda { position: fixed; right: 16px; top: 14px; z-index: 2; display: none; font-size: 12px; color: rgba(255,255,255,.55); }
+  body.demo .ayuda { display: block; }
+
   /* Panel explicativo: solo en modo desarrollo */
   #panel { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 2; display: none; gap: 8px; }
   #panel.visible { display: grid; }
@@ -74,6 +109,21 @@
 <body>
 <canvas id="lienzo"></canvas>
 
+<div id="ahora" aria-live="polite">
+  <div class="tarjeta-libro">
+    <div id="portada"></div>
+    <h2 id="tituloObra"></h2>
+    <p id="autorObra"></p>
+    <div class="progreso">
+      <div id="barra"><b></b></div>
+      <div class="tiempos"><span id="tActual">0:00</span><span id="tTotal">0:00</span></div>
+    </div>
+    <button type="button" id="botonPlay" aria-label="Reproducir o pausar"></button>
+    <div id="clima"><i></i><span id="climaTexto"></span><small id="climaDetalle"></small></div>
+  </div>
+</div>
+<div class="ayuda">Tecla E: panel técnico</div>
+
 <div id="config">
   <form id="formulario">
     <div class="marca">
@@ -85,10 +135,10 @@
       <p class="rotulo">1 · Archivos</p>
       <label id="zona" for="archivos">
         <strong>Elige o arrastra aquí la anotación y el audio</strong>
-        <small>el archivo .json del preprocesamiento y la narración (.mp3)</small>
-        <span class="archivos"><span class="chip" id="chipJson">Anotación .json</span><span class="chip" id="chipAudio">Audio</span></span>
+        <small>el archivo .json del preprocesamiento y la narración (.mp3); opcional: una imagen de portada</small>
+        <span class="archivos"><span class="chip" id="chipJson">Anotación .json</span><span class="chip" id="chipAudio">Audio</span><span class="chip" id="chipPortada">Portada (opcional)</span></span>
       </label>
-      <input class="oculto" type="file" id="archivos" accept=".json,application/json,audio/*" multiple>
+      <input class="oculto" type="file" id="archivos" accept=".json,application/json,audio/*,image/*" multiple>
       <input class="oculto" type="file" id="archivoAnotacion" accept=".json,application/json" tabindex="-1" aria-hidden="true">
       <input class="oculto" type="file" id="archivoAudio" accept="audio/*" tabindex="-1" aria-hidden="true">
     </div>
@@ -117,7 +167,7 @@
         <option value="desarrollo">Desarrollo</option>
         <option value="experimento">Experimento</option>
       </select>
-      <p class="nota" id="notaModo" style="margin-top:8px">Con panel explicativo y controles. Tecla <b>E</b>: mostrar u ocultar el panel; clic en la línea de tiempo: saltar a ese momento.</p>
+      <p class="nota" id="notaModo" style="margin-top:8px"></p>
     </div>
 
     <div id="filaParticipante">
@@ -214,25 +264,32 @@ const Ambientacion = (() => {
 })();
 window.Ambientacion = Ambientacion;
 
-/* ===================== Renderizado: resplandor radial difuso ===================== */
-// Paso 4. Gradiente radial difuso a pantalla completa, sin formas ni figuras (R3):
-// una luz suave en el centro con el color de las ecuaciones (1)-(5), que se apaga hacia
-// los bordes en un tono vecino más oscuro.
+/* ===================== Renderizado: gradientes radiales difusos ===================== */
+// Paso 4. Luz difusa a pantalla completa, sin formas ni figuras (R3): sobre un fondo oscuro
+// teñido se superponen tres gradientes radiales fijos, con el color de las ecuaciones (1)-(5)
+// y dos tonos vecinos, que dan profundidad. No se mueven: solo cambian de color.
 function crearRenderizador(destino) {
   const ctx = destino.getContext("2d", { alpha: false });
+  const mancha = (x, y, r, color) => {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color);
+    g.addColorStop(1, color.replace(/ \/ [\d.]+\)$/, " / 0)"));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, destino.width, destino.height);
+  };
+  const hsla = (H, S, L, A) => `hsl(${H.toFixed(1)} ${(S * 100).toFixed(1)}% ${(L * 100).toFixed(1)}% / ${A})`;
   return {
     tipo: "2d", lienzo: destino,
     dibujar({ H, S, L }) {
-      const w = destino.width, h = destino.height;
-      ctx.setTransform(1, 0, 0, h / w, 0, 0); // elipse con la proporción de la pantalla
-      const r = w * 0.72;
-      const g = ctx.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, r);
-      g.addColorStop(0, hsl(H, S, L));
-      g.addColorStop(0.45, hsl(H - 12, S * 0.9, L * 0.72));
-      g.addColorStop(1, hsl(H - 30, S * 0.75, L * 0.22));
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, w, w);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      const w = destino.width, h = destino.height, d = Math.hypot(w, h);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = hsl(H - 20, S * 0.45, Math.min(0.09, L * 0.2));
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "lighter";
+      mancha(w * 0.28, h * 0.32, d * 0.55, hsla(H, S, L * 0.85, 0.85));
+      mancha(w * 0.78, h * 0.72, d * 0.5, hsla(H - 35, S * 0.9, L * 0.7, 0.7));
+      mancha(w * 0.62, h * 0.12, d * 0.35, hsla(H + 25, S * 0.8, L * 0.6, 0.45));
+      ctx.globalCompositeOperation = "source-over";
     },
   };
 }
@@ -314,6 +371,7 @@ function cuadro(ahora) {
     render.dibujar({ H: sesion.color.H, S: sesion.color.S, L });
   }
 
+  actualizarAhora(t);
   if (sesion.modo === "desarrollo") actualizarPanel(t);
   requestAnimationFrame(cuadro);
 }
@@ -332,6 +390,82 @@ function registrarFps(ahora, dt) {
     sesion.cuadrosSeg = 0; sesion.cuadrosLentos = 0; sesion.inicioSeg = ahora;
   }
 }
+
+/* ---------- Pantalla "Reproduciendo" ---------- */
+const mmss = (x) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, "0")}`;
+
+// Nombre del clima de un segmento, a partir de valencia y activación (solo en modo demostración).
+function nombreClima(v, a) {
+  if (v < 0 && a >= 0.7) return "Tensión";
+  if (v < 0 && a >= 0.45) return "Inquietud";
+  if (v <= -0.3) return "Tristeza";
+  if (v >= 0.2 && a >= 0.6) return "Alegría";
+  if (v >= 0.2) return "Calma";
+  return "Expectativa";
+}
+
+function datosObra(doc) {
+  let titulo = doc.titulo || "Audiolibro", autor = doc.autor || "";
+  const m = !autor && /^(.*?)\s*\((.+)\)\s*$/.exec(titulo);
+  if (m) { titulo = m[1]; autor = m[2]; }
+  return { titulo, autor };
+}
+
+function prepararAhora(portada) {
+  const { titulo, autor } = datosObra(sesion.doc);
+  $("tituloObra").textContent = titulo;
+  $("autorObra").textContent = autor;
+  const p = $("portada");
+  p.replaceChildren();
+  if (portada) {
+    const im = document.createElement("img");
+    im.alt = "Portada de " + titulo;
+    im.src = URL.createObjectURL(portada);
+    p.append(im);
+  } else {
+    const tapa = document.createElement("div");
+    tapa.className = "tapa-generada";
+    const i = document.createElement("i"); i.textContent = autor;
+    const b = document.createElement("b"); b.textContent = titulo;
+    tapa.append(i, b, document.createElement("span"));
+    p.append(tapa);
+  }
+  $("ahora").classList.add("visible");
+}
+
+let ultimoAhora = 0, climaMostrado = "";
+function actualizarAhora(t) {
+  const ahora = performance.now();
+  if (ahora - ultimoAhora < 200) return;
+  ultimoAhora = ahora;
+  const dur = audio.duration || duracionTotal();
+  $("barra").firstElementChild.style.width = `${Math.min(100, (t / dur) * 100)}%`;
+  $("tActual").textContent = mmss(t);
+  $("tTotal").textContent = mmss(dur);
+  $("botonPlay").classList.toggle("sonando", !audio.paused);
+  if (sesion.modo !== "desarrollo") return;
+  let texto, detalle = "", c = sesion.color;
+  if (sesion.perfil.estatico) { texto = "Sin ambientación"; detalle = "condición control"; c = null; }
+  else {
+    const s = sesion.doc.segmentos[Math.max(0, sesion.segIdx)];
+    texto = nombreClima(s.valencia, s.activacion);
+    detalle = `intensidad ${Math.round(s.activacion * 100)} %`;
+  }
+  if (texto !== climaMostrado) {
+    climaMostrado = texto;
+    $("clima").style.opacity = 0;
+    setTimeout(() => { $("climaTexto").textContent = texto; $("clima").style.opacity = 1; }, 300);
+  }
+  $("climaDetalle").textContent = detalle;
+  $("clima").firstElementChild.style.background = c ? hsl(c.H, Math.min(1, c.S + 0.2), Math.min(0.8, c.L + 0.25)) : "#999";
+}
+
+$("botonPlay").addEventListener("click", () => { if (audio.paused) audio.play(); else audio.pause(); });
+$("barra").addEventListener("click", (e) => {
+  if (sesion.modo !== "desarrollo") return;
+  const rect = $("barra").getBoundingClientRect();
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * (audio.duration || duracionTotal());
+});
 
 /* ---------- Panel explicativo (solo modo desarrollo) ---------- */
 const linea = $("linea");
@@ -431,6 +565,7 @@ linea.addEventListener("click", (e) => {
 addEventListener("keydown", (e) => {
   if (sesion.modo === "desarrollo" && sesion.doc && e.key.toLowerCase() === "e" && !e.ctrlKey) {
     $("panel").classList.toggle("visible");
+    document.body.classList.toggle("con-panel", $("panel").classList.contains("visible"));
     if ($("panel").classList.contains("visible")) prepararLinea();
   }
 });
@@ -506,15 +641,17 @@ const params = new URLSearchParams(location.search);
 for (const k of ["condicion", "modo", "participante"]) if (params.get(k)) $(k).value = params.get(k);
 
 /* ---------- Pantalla de inicio ---------- */
-const elegidos = { anotacion: null, audio: null };
+const elegidos = { anotacion: null, audio: null, portada: null };
 function tomarArchivos(lista) {
   for (const f of lista) {
     if (/\.json$/i.test(f.name) || f.type === "application/json") elegidos.anotacion = f;
     else if (f.type.startsWith("audio/") || /\.(mp3|wav|ogg|m4a)$/i.test(f.name)) elegidos.audio = f;
+    else if (f.type.startsWith("image/")) elegidos.portada = f;
   }
   const chip = (id, f, txt) => { $(id).textContent = f ? "✓ " + f.name : txt; $(id).classList.toggle("ok", !!f); };
   chip("chipJson", elegidos.anotacion, "Anotación .json");
   chip("chipAudio", elegidos.audio, "Audio");
+  chip("chipPortada", elegidos.portada, "Portada (opcional)");
 }
 $("archivos").addEventListener("change", (e) => tomarArchivos(e.target.files));
 const zona = $("zona");
@@ -536,7 +673,7 @@ function marcarModo(m) {
   $("filaParticipante").classList.toggle("visible", m === "experimento");
   $("notaModo").innerHTML = m === "experimento"
     ? "Pantalla completa, sin cursor ni controles. No se puede pausar ni retroceder; al final se descarga el registro (también con <b>Ctrl+Shift+L</b>)."
-    : "Con panel explicativo y controles. Tecla <b>E</b>: mostrar u ocultar el panel; clic en la línea de tiempo: saltar a ese momento.";
+    : "Muestra el clima de cada momento y permite pausar y saltar. Tecla <b>E</b>: panel técnico con la línea de tiempo.";
 }
 document.querySelectorAll(".interruptor button").forEach((b) => b.addEventListener("click", () => marcarModo(b.dataset.modo)));
 marcarCondicion($("condicion").value);
@@ -581,10 +718,11 @@ $("formulario").addEventListener("submit", async (e) => {
       if (params.get("pantallaCompleta") !== "0") await document.documentElement.requestFullscreen?.().catch(() => {});
     } else {
       audio.controls = true;
-      $("panel").classList.add("visible");
-      audio.addEventListener("loadedmetadata", prepararLinea);
-      prepararLinea();
+      document.body.classList.add("demo");
+      audio.addEventListener("loadedmetadata", () => { if ($("panel").classList.contains("visible")) prepararLinea(); });
+      if (params.get("panel") === "1") { $("panel").classList.add("visible"); document.body.classList.add("con-panel"); prepararLinea(); }
     }
+    prepararAhora(elegidos.portada);
 
     evento("inicio", { condicion: sesion.condicion, renderizador: render.tipo });
     requestAnimationFrame(cuadro);

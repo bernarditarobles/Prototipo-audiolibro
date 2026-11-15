@@ -33,8 +33,9 @@ def main(argv=None) -> int:
     p.add_argument("--modelo-whisper", default="medium")
     p.add_argument("--idioma", default="es")
     p.add_argument("--d-min", type=float, default=D_MIN_POR_DEFECTO, help="Duración mínima de segmento en s (por defecto 20).")
-    p.add_argument("--matiz-base", type=float, default=210.0, help="Matiz base H0 de la obra, en grados (0-360).")
+    p.add_argument("--matiz-base", type=float, default=355.0, help="Matiz base H0 de la obra, en grados (0-360).")
     p.add_argument("--titulo", default="")
+    p.add_argument("--autor", default="")
     p.add_argument("--modelo-llm", default=MODELO_POR_DEFECTO)
     p.add_argument("--esfuerzo", choices=["low", "medium", "high", "xhigh", "max"], default=None)
     p.add_argument("--solo-segmentar", action="store_true", help="No anota; deja valencia=0 y activación=0 (útil para pruebas).")
@@ -69,6 +70,7 @@ def main(argv=None) -> int:
     documento = {
         "version": VERSION_FORMATO,
         "titulo": a.titulo,
+        "autor": a.autor,
         "audio": Path(a.audio).name if a.audio else None,
         "matiz_base": a.matiz_base % 360,
         "d_min": a.d_min,

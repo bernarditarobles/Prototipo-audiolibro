@@ -1,6 +1,7 @@
 {
   "version": 1,
-  "titulo": "La mujer alta (Pedro A. de Alarcón)",
+  "titulo": "La mujer alta",
+  "autor": "Pedro Antonio de Alarcón",
   "audio": "mujer_alta_128kb.mp3",
   "matiz_base": 355,
   "d_min": 20.0,
