@@ -15,8 +15,8 @@ const THEME = {
   bodyFontFace: "Calibri",
   colors: {
     dk1: "1B1622", lt1: "FFFFFF", dk2: "0E0B14", lt2: "F1EEF5",
-    accent1: "E3A93F", accent2: "7B4FC4", accent3: "6B6380", accent4: "C46A9A",
-    accent5: "4F8A6E", accent6: "A39CB3", hlink: "7B4FC4", folHlink: "6B6380",
+    accent1: "E3A93F", accent2: "B8323A", accent3: "6B6380", accent4: "C46A9A",
+    accent5: "4F8A6E", accent6: "A39CB3", hlink: "B8323A", folHlink: "6B6380",
   },
 };
 
@@ -72,16 +72,16 @@ pasos.forEach(([n, t, d], i) => {
 s.addImage({ path: img("docs/capturas_estimulo/minimo_calma.png"), x: M, y: 3.6, w: 4.6, h: 2.59, objectName: "Calma" });
 s.addImage({ path: img("docs/capturas_estimulo/minimo_terror.png"), x: M + 4.85, y: 3.6, w: 4.6, h: 2.59, objectName: "Terror" });
 caja(s, [{ text: "Calma", options: { bold: true, breakLine: true } }, { text: "cálida y tranquila", options: { fontSize: 14, color: C.accent3 } }], { x: M, y: 6.3, w: 4.6, h: 0.7, fontSize: 16 });
-caja(s, [{ text: "Tensión", options: { bold: true, breakLine: true } }, { text: "violeta y más intensa", options: { fontSize: 14, color: C.accent3 } }], { x: M + 4.85, y: 6.3, w: 4.6, h: 0.7, fontSize: 16 });
+caja(s, [{ text: "Tensión", options: { bold: true, breakLine: true } }, { text: "roja y más intensa", options: { fontSize: 14, color: C.accent3 } }], { x: M + 4.85, y: 6.3, w: 4.6, h: 0.7, fontSize: 16 });
 s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 10.35, y: 3.6, w: 2.38, h: 2.59, rectRadius: 0.12, fill: { color: C.background2 }, line: { color: C.background2 }, objectName: "Sin imágenes" });
 caja(s, [{ text: "Sin imágenes de la historia", options: { bold: true, fontSize: 16, breakLine: true } }, { text: "A propósito: cada uno imagina las escenas", options: { fontSize: 14, color: C.accent3 } }],
   { x: 10.55, y: 3.85, w: 2.0, h: 2.2, paraSpaceAfter: 6 });
-s.addNotes("El sistema analiza el tono emocional de cada momento de la historia: qué tan intenso y qué tan agradable es. Con eso cambia la luz de la pantalla: cálida y tranquila en la calma, violeta e intensa en la tensión. No muestra imágenes de la historia, a propósito: la idea es acompañar el clima y dejar que cada uno imagine las escenas.");
+s.addNotes("El sistema analiza el tono emocional de cada momento de la historia: qué tan intenso y qué tan agradable es. Con eso cambia la luz de la pantalla: ámbar y tranquila en la calma, roja e intensa en la tensión. No muestra imágenes de la historia, a propósito: la idea es acompañar el clima y dejar que cada uno imagine las escenas.");
 
 // 3. Demo
 s = pres.addSlide({ masterName: "OSCURO" });
 s.addText("Demo", { placeholder: "title" });
-s.addImage({ path: img("docs/capturas/llamativo_terror.png"), x: 2.4, y: 1.6, w: 8.53, h: 4.8, objectName: "Sistema funcionando" });
+s.addImage({ path: img("docs/capturas/demo_minimo_terror.png"), x: 2.4, y: 1.6, w: 8.53, h: 4.8, objectName: "Sistema funcionando" });
 caja(s, "La mujer alta, de Pedro Antonio de Alarcón · 36 minutos · LibriVox", { x: 2.4, y: 6.55, w: 8.53, h: 0.4, fontSize: 14, color: C.accent6, align: "center" });
 s.addNotes("Abrir reproductor/index.html. Elegir anotacion.json y el MP3, perfil Llamativo, modo Demostración. Saltar a 13:34 (aparece la mujer alta) y a 0:50 (la calma). Después repetir con el perfil Mínimo y ocultar el panel con la tecla E.");
 
@@ -118,19 +118,19 @@ s.addNotes("El desafío es qué tan suave o intenso tiene que ser el efecto para
 // 5. A futuro
 s = pres.addSlide({ masterName: "CLARO" });
 s.addText("A futuro: una app de audiolibros con ambientación", { placeholder: "title" });
-s.addImage({ path: img("presentacion/maqueta_app.png"), x: M, y: 1.45, w: 7.1, h: 5.29, objectName: "Maqueta de la app" });
+s.addImage({ path: img("presentacion/maqueta_tv.png"), x: M, y: 1.45, w: 8.5, h: 5.22, objectName: "Maqueta: TV y celular" });
 const futuro = [
+  ["Del celular a la TV", "Se elige el audiolibro en el celular y la ambientación se ve en la TV."],
   ["Catálogo ya analizado", "El análisis se hace una sola vez por libro; la app solo reproduce."],
   ["Integrable en apps existentes", "Por ejemplo, en plataformas de audiolibros como Spotify."],
-  ["Luces de la habitación", "Llevar la ambientación a lámparas inteligentes, sin mirar una pantalla."],
 ];
 futuro.forEach(([t, d], i) => {
-  const y = 1.8 + i * 1.55;
-  s.addShape(pres.shapes.OVAL, { x: 8.1, y: y + 0.05, w: 0.45, h: 0.45, fill: { color: i === 2 ? C.accent2 : C.accent1 }, line: { color: i === 2 ? C.accent2 : C.accent1 }, objectName: `Futuro ${i + 1}` });
-  caja(s, [{ text: t, options: { bold: true, fontSize: 18, breakLine: true } }, { text: d, options: { fontSize: 15, color: C.accent3 } }], { x: 8.75, y, w: 4.0, h: 1.3, paraSpaceAfter: 4 });
+  const y = 1.75 + i * 1.6;
+  s.addShape(pres.shapes.OVAL, { x: 9.35, y: y + 0.05, w: 0.42, h: 0.42, fill: { color: i === 0 ? C.accent2 : C.accent1 }, line: { color: i === 0 ? C.accent2 : C.accent1 }, objectName: `Futuro ${i + 1}` });
+  caja(s, [{ text: t, options: { bold: true, fontSize: 17, breakLine: true } }, { text: d, options: { fontSize: 14, color: C.accent3 } }], { x: 9.95, y, w: 2.8, h: 1.45, paraSpaceAfter: 4 });
 });
-caja(s, "Maqueta ilustrativa, no implementada.", { x: M, y: 6.85, w: 7.1, h: 0.35, fontSize: 11, italic: true, color: C.accent6 });
-s.addNotes("A futuro, esto podría integrarse a una app de audiolibros con un catálogo de relatos ya analizados. Encaja con el diseño, porque el análisis se hace una sola vez por libro y después solo se reproduce. También podría llevarse a las luces de la habitación, para que la ambientación forme parte del entorno.");
+caja(s, "Maqueta ilustrativa, no implementada.", { x: M, y: 6.85, w: 8.5, h: 0.35, fontSize: 11, italic: true, color: C.accent6 });
+s.addNotes("A futuro, esto podría ser una app de audiolibros: desde el celular elegís el libro y la ambientación se ve en la tele, como la luz de la habitación mientras escuchás. Tendría un catálogo de relatos ya analizados, porque el análisis se hace una sola vez por libro y después solo se reproduce, y podría integrarse en plataformas de audiolibros que ya existen.");
 
 (async () => {
   await pres.writeFile({ fileName: SALIDA });
