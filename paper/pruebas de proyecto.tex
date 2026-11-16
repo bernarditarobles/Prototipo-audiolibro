@@ -15,65 +15,28 @@
 \maketitle
  
 \begin{abstract}
-% MÓDULO 4
+El consumo de audiolibros crece, pero la experiencia sigue siendo puramente auditiva, y no se sabe si un estímulo visual que acompañe la escucha potencia la experiencia o interfiere con la imaginación del oyente. Este trabajo diseña e implementa una prueba de concepto de un sistema que genera una ambientación visual reactiva sincronizada con la narración de un audiolibro, cuyas reglas de diseño se derivan de la Teoría de la Codificación Dual, la Teoría Cognitiva del Aprendizaje Multimedia y el concepto de \textit{ambient display}. El sistema transcribe el audio, lo divide en segmentos de al menos 20~s y asigna a cada uno una valencia y una activación, que un reproductor web traduce en tiempo real a color y luz difusa, sin figuras. La prueba de concepto se aplicó a \textit{La mujer alta}, de Pedro Antonio de Alarcón, en una grabación de 36 minutos. En la reproducción completa, el color cambió como máximo 20~ms después del inicio de cada segmento, y la animación se mantuvo en 60 cuadros por segundo sin degradarse. Se propone además un experimento entre sujetos, con una condición sin estímulo, una ambientación mínima y una llamativa, para evaluar su efecto sobre la comprensión, la inmersión y la fatiga visual. La validación de la anotación con lectores humanos queda pendiente.
 \end{abstract}
  
 % =====================================================================
 \section{Introducción}
-% MÓDULO 4 - Se redacta al final. Por ahora contiene problemática,
-% objetivo e investigación bibliográfica (consigna del Módulo 3).
- 
+
 \subsection{Problemática}
 % PENDIENTE: agregar una cita con un dato sobre el crecimiento del consumo de audiolibros.
 El consumo de audiolibros ha crecido fuertemente, pero la experiencia sigue siendo puramente auditiva. Al escuchar una narración, el oyente construye imágenes mentales propias, y la combinación de información verbal y no verbal puede favorecer el recuerdo \cite{paivio1991}. Sin embargo, no se sabe si un estímulo visual generado automáticamente potencia esa experiencia o interfiere con la imaginación de quien escucha. Hasta donde se pudo relevar, las aplicaciones actuales reproducen audiolibros, pero no acompañan la escucha de un libro completo con una ambientación visual dinámica.
- 
+
+La investigación previa ofrece indicios en ambos sentidos. Por un lado, la Teoría de la Codificación Dual sostiene que representar una información en un sistema verbal y en uno no verbal favorece su recuerdo \cite{paivio1986, paivio1991}, y distribuir la información entre el canal auditivo y el visual puede reducir la carga cognitiva \cite{mousavi1995}. Por otro lado, la Teoría Cognitiva del Aprendizaje Multimedia advierte que el material que no contribuye al contenido consume parte de la capacidad limitada de procesamiento \cite{mayer2009, mayermoreno2003, mayer2024}, y una tarea visual exigente reduce la comprensión de un relato escuchado \cite{xie2023}. Además, la inmersión en una historia depende de las imágenes que construye el propio oyente \cite{greenbrock2000, greenbrock2002}, por lo que un estímulo que las reemplace podría reducirla.
+
+Los trabajos más cercanos abordan partes del problema por separado: comparan la comprensión entre lectura y escucha \cite{rogowsky2016}, transforman rasgos de una señal de audio en una escena visual reactiva para fragmentos musicales breves \cite{graf2021}, proponen interfaces ambientales que comunican mediante cambios sutiles procesables en el trasfondo de la atención \cite{wisneski1998}, o estudian el efecto emocional de colores fijos \cite{wilmsoberfeld2018}. Ninguno implementa ni evalúa una ambientación visual reactiva durante la escucha de un relato de ficción completo.
+
 \subsection{Objetivo general}
 Diseñar e implementar una prueba de concepto de un sistema que genera una ambientación visual reactiva sincronizada con la narración de un audiolibro, cuyas reglas de diseño se derivan de la Teoría de la Codificación Dual, la Teoría Cognitiva del Aprendizaje Multimedia y el concepto de \textit{ambient display}, y proponer un diseño experimental para evaluar su efecto sobre la comprensión, la inmersión y la fatiga visual del oyente en comparación con la escucha sin estímulo visual.
- 
-\subsection{Investigación bibliográfica}
-% Temporal: en el Módulo 4 esta lista desaparece y las referencias
-% se integran en la introducción.
- 
-\begin{enumerate}
- 
-\item \textbf{Paivio (1991)} \cite{paivio1991}. Revisión de la Teoría de la Codificación Dual: un sistema verbal y otro no verbal, conectados entre sí.
- 
-\item \textbf{Paivio (1986)} \cite{paivio1986}. Desarrollo completo del modelo (\textit{logogens} e \textit{imagens}) y de las conexiones referenciales.
- 
-\item \textbf{Mayer (2009)} \cite{mayer2009}. Teoría Cognitiva del Aprendizaje Multimedia (CTML) y sus principios de diseño.
- 
-\item \textbf{Mayer y Moreno (2003)} \cite{mayermoreno2003}. Escenarios de sobrecarga cognitiva y estrategias para reducirla.
- 
-\item \textbf{Mayer (2024)} \cite{mayer2024}. Revisión actualizada de la CTML y de sus herramientas de medición.
- 
-\item \textbf{Rogowsky et al. (2016)} \cite{rogowsky2016}. Comprensión en lectura, escucha y modalidad dual.
- 
-\item \textbf{Mousavi et al. (1995)} \cite{mousavi1995}. Reducción de la carga cognitiva al distribuir información entre canal auditivo y visual.
- 
-\item \textbf{Green y Brock (2000)} \cite{greenbrock2000}. Concepto de transporte narrativo y escala para medirlo.
- 
-\item \textbf{Green y Brock (2002)} \cite{greenbrock2002}. Modelo de transporte e imaginería.
- 
-\item \textbf{Wisneski et al. (1998)} \cite{wisneski1998}. Concepto de \textit{ambient display}.
- 
-\item \textbf{Xie et al. (2023)} \cite{xie2023}. Seguimiento cortical del habla bajo atención dividida entre audio y una tarea visual.
- 
-\item \textbf{Wilms y Oberfeld (2018)} \cite{wilmsoberfeld2018}. Efecto del matiz, la saturación y el brillo sobre la emoción.
- 
-\item \textbf{Graf et al. (2021)} \cite{graf2021}. Sistema de visualización musical en tiempo real a partir de rasgos del audio.
- 
-\item \textbf{Radford et al. (2023)} \cite{radford2023}. Whisper: reconocimiento de habla con marcas temporales, usado para sincronizar texto y audio en el sistema.
- 
-\item \textbf{Russell (1980)} \cite{russell1980}. Modelo circumplejo del afecto (valencia y activación), usado para anotar el tono emocional de cada segmento.
- 
-\item \textbf{Appel et al. (2015)} \cite{appel2015}. Versión breve de la escala de transporte narrativo, propuesta como medida de inmersión.
- 
-\item \textbf{Seguí et al. (2015)} \cite{segui2015}. Cuestionario validado de síntomas visuales asociados al uso de pantallas, propuesto como medida de fatiga visual.
- 
-\item \textbf{Lakens (2017)} \cite{lakens2017}. Guía práctica de pruebas de equivalencia, propuesta para evaluar si la ambientación mínima no empeora la comprensión.
- 
-\end{enumerate}
- 
+
+\subsection{Aporte y organización}
+El trabajo aporta, en primer lugar, cinco requisitos de diseño para un estímulo que acompañe la escucha sin competir con ella, derivados de la literatura. En segundo lugar, un sistema en dos etapas que transcribe la narración con Whisper \cite{radford2023}, anota el tono emocional de cada segmento según las dimensiones de valencia y activación \cite{russell1980} y lo traduce en tiempo real a color y luz difusa. En tercer lugar, una prueba de concepto aplicada a un cuento completo, con una verificación técnica de su sincronización y su fluidez. Por último, un diseño experimental que mide la comprensión, la inmersión mediante la escala breve de transporte narrativo \cite{appel2015} y la fatiga visual \cite{segui2015}, y que evalúa con una prueba de equivalencia \cite{lakens2017} si la ambientación mínima no empeora la comprensión.
+
+El artículo se organiza de la siguiente manera. La Sección~II resume los antecedentes y la Sección~III, el marco teórico. La Sección~IV presenta el diseño del sistema y la Sección~V, su implementación y la verificación técnica. La Sección~VI propone el diseño experimental y la Sección~VII, los resultados esperados. La Sección~VIII discute las limitaciones y el trabajo futuro, y la Sección~IX presenta las conclusiones.
+
 % =====================================================================
 \section{Antecedentes}
  
@@ -288,7 +251,11 @@ Por último, se propone trasladar la ambientación de la pantalla a la iluminaci
  
 % =====================================================================
 \section{Conclusión}
-% MÓDULO 4
+Este trabajo diseñó e implementó un sistema que acompaña la escucha de un audiolibro con una ambientación visual reactiva al contenido de la historia. Sus reglas de diseño se derivan de la literatura: el estímulo no exige interacción, cambia de forma lenta y sutil, no muestra figuras que reemplacen la imaginería del oyente, responde al tono de la narración y usa una saturación y un brillo moderados.
+
+La prueba de concepto muestra que el sistema es técnicamente factible. A partir del audio de un cuento de 36 minutos, el sistema transcribió, segmentó y anotó la obra, y el reproductor mantuvo la sincronización con la narración, con un desfase máximo de 20~ms, y una tasa estable de 60 cuadros por segundo durante toda la sesión, sin degradación. La anotación sigue el arco emocional del relato, con picos de activación en los encuentros con la mujer alta y valores bajos en la conversación que lo enmarca, aunque esta observación es cualitativa: la anotación no se comparó con la de lectores humanos y la realizó el modelo en una sesión interactiva, no mediante la API.
+
+Con esto, el sistema queda en condiciones de usarse en el experimento propuesto. Quedan por responder dos preguntas: si la valencia y la activación asignadas por el modelo coinciden con las que perciben los lectores, y si la ambientación mínima acompaña la escucha sin afectar la comprensión ni aumentar la fatiga visual, como se espera a partir de los antecedentes. Responderlas permitiría saber si una ambientación de este tipo puede integrarse en las aplicaciones de audiolibros para enriquecer la escucha sin competir con la imaginación de quien escucha.
  
 \bibliographystyle{IEEEtran}
 \bibliography{Bibliografia}
